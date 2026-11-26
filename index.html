@@ -143,6 +143,12 @@
   .list-item .acts{display:flex;gap:8px}
   .mini{padding:8px 12px;font-size:13px;border-radius:9px}
   footer.app{text-align:center;color:var(--muted);font-size:12.5px;padding:24px 16px}
+  .user-chip{color:#fff;font-weight:600;font-size:14px;display:flex;align-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);padding:8px 12px;border-radius:10px}
+  .login-card{max-width:400px;margin:40px auto;padding:30px}
+  .login-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--red),var(--red-deep));color:#fff;font-weight:800;padding:8px 14px;border-radius:10px;font-size:15px}
+  .role-tag{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;margin-left:8px}
+  .role-admin{background:#ffe0b3;color:#8a4b00}
+  .role-user{background:#e5ecff;color:#2742b0}
   .overlay{position:fixed;inset:0;background:rgba(20,22,40,.55);display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
   .overlay.show{display:flex}
   .modal{background:#fff;border-radius:16px;max-width:400px;width:100%;padding:24px;box-shadow:var(--shadow)}
@@ -168,14 +174,36 @@
         <div class="sub">Bài tập tại lớp</div>
       </div>
     </div>
-    <div class="top-actions">
-      <button id="btn-home" onclick="goHome()">🏠 Trang chủ</button>
-      <button id="btn-import" onclick="showImport()">➕ Bộ đề mới</button>
+    <div class="top-actions" id="top-actions">
+      <span id="user-chip" class="user-chip hidden"></span>
+      <button id="btn-home" class="hidden" onclick="goHome()">🏠 Trang chủ</button>
+      <button id="btn-import" class="hidden" onclick="showImport()">➕ Bộ đề mới</button>
+      <button id="btn-admin" class="hidden" onclick="showAdmin()">👤 Quản lý user</button>
+      <button id="btn-logout" class="hidden" onclick="logout()">Đăng xuất</button>
     </div>
   </div>
 </header>
 
 <div class="wrap">
+
+  <!-- LOGIN -->
+  <section id="screen-login">
+    <div class="card login-card">
+      <div class="login-badge">✈ Khoa GOT</div>
+      <h2 style="margin:12px 0 2px">Đăng nhập</h2>
+      <p class="meta" style="color:var(--muted);margin:0 0 16px">Nhập tài khoản để vào làm bài tập</p>
+      <div class="field" style="margin-bottom:12px">
+        <label>Tên đăng nhập</label>
+        <input id="login-user" autocomplete="username" placeholder="VD: VJC20477" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="field" style="margin-bottom:6px">
+        <label>Mật khẩu</label>
+        <input id="login-pass" type="password" autocomplete="current-password" placeholder="Mật khẩu" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div id="login-msg"></div>
+      <button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="doLogin()">Đăng nhập</button>
+    </div>
+  </section>
 
   <!-- HOME -->
   <section id="screen-home">
@@ -326,10 +354,28 @@
     </div>
   </section>
 
+  <!-- ADMIN -->
+  <section id="screen-admin" class="hidden">
+    <div class="card" style="padding:24px">
+      <button class="btn btn-soft mini" onclick="goHome()">← Quay lại</button>
+      <h2 style="margin-top:14px">Quản lý tài khoản</h2>
+      <p class="meta" style="color:var(--muted);margin-top:-6px">Thêm tài khoản học viên để đăng nhập làm bài</p>
+      <div class="cfg-grid" style="margin-top:14px">
+        <div class="field"><label>Tên đăng nhập mới</label><input id="nu-user" placeholder="VD: VJC20490"></div>
+        <div class="field"><label>Mật khẩu</label><input id="nu-pass" placeholder="Mật khẩu"></div>
+      </div>
+      <label class="switch" style="margin-top:12px;max-width:280px"><span>Quyền quản trị (admin)</span><input type="checkbox" id="nu-admin"></label>
+      <div id="admin-msg"></div>
+      <div style="margin-top:12px"><button class="btn btn-primary" onclick="addUser()">➕ Thêm tài khoản</button></div>
+      <div class="section-title">Danh sách tài khoản</div>
+      <div id="user-list"></div>
+    </div>
+  </section>
+
 </div>
 
 <footer class="app">
-  Khoa GOT — Bài tập tại lớp • Chạy offline trên trình duyệt
+  Khoa GOT — Bài tập tại lớp • Phiên bản V1.0 Final • Chạy offline trên trình duyệt
 </footer>
 
 <div class="overlay" id="confirm-overlay">
@@ -2834,7 +2880,7 @@ function allSubjects(){ return [...BUILTIN_SUBJECTS.map(s=>({...s,builtin:true})
 let S = { subject:null, qlist:[], answers:[], order:[], idx:0, pass:80, timeLimit:0, tLeft:0, timer:null, startTs:0 };
 
 /* ===== Navigation ===== */
-const screens=["home","config","quiz","result","review","import"];
+const screens=["login","home","config","quiz","result","review","import","admin"];
 function show(name){ screens.forEach(s=>document.getElementById("screen-"+s).classList.toggle("hidden", s!==name)); window.scrollTo({top:0,behavior:"smooth"}); }
 function goHome(){ stopTimer(); renderHome(); show("home"); }
 function showImport(){ renderManage(); switchTab("paste"); show("import"); }
@@ -3125,8 +3171,74 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 let flashT=null;
 function flash(msg){ const f=document.getElementById("flash"); f.textContent=msg; f.classList.add("show"); clearTimeout(flashT); flashT=setTimeout(()=>f.classList.remove("show"),2200); }
 
+/* ===== Auth (đăng nhập cục bộ, không phải bảo mật mạnh) ===== */
+const BUILTIN_USERS=[
+  {u:"admin",p:"123",role:"admin"},
+  {u:"test",p:"123",role:"user"},
+  {u:"VJC20477",p:"aloalo",role:"user"},
+  {u:"VJC20478",p:"aloalo",role:"user"},
+  {u:"VJC20479",p:"aloalo",role:"user"},
+  {u:"VJC20480",p:"aloalo",role:"user"},
+  {u:"VJC20482",p:"aloalo",role:"user"},
+  {u:"VJC20484",p:"aloalo",role:"user"}
+];
+const LS_USERS="vjaa_quiz_users_v1", SS_SESSION="vjaa_quiz_session";
+let currentUser=null;
+function loadUsers(){ try{return JSON.parse(localStorage.getItem(LS_USERS)||"[]");}catch(e){return[];} }
+function saveUsers(a){ try{localStorage.setItem(LS_USERS,JSON.stringify(a));return true;}catch(e){flash("Không lưu được tài khoản");return false;} }
+function allUsers(){ return [...BUILTIN_USERS.map(x=>({...x,builtin:true})), ...loadUsers().map(x=>({...x,builtin:false}))]; }
+function val(id){ return document.getElementById(id).value; }
+function doLogin(){
+  const u=val("login-user").trim(), p=val("login-pass");
+  const msg=document.getElementById("login-msg");
+  if(!u||!p){ msg.innerHTML='<div class="msg err">Nhập tên đăng nhập và mật khẩu.</div>'; return; }
+  const found=allUsers().find(x=>x.u.toLowerCase()===u.toLowerCase() && x.p===p);
+  if(!found){ msg.innerHTML='<div class="msg err">Sai tên đăng nhập hoặc mật khẩu.</div>'; return; }
+  currentUser={u:found.u,role:found.role};
+  try{sessionStorage.setItem(SS_SESSION,JSON.stringify(currentUser));}catch(e){}
+  msg.innerHTML=""; document.getElementById("login-user").value=""; document.getElementById("login-pass").value="";
+  afterLogin();
+}
+function afterLogin(){
+  const chip=document.getElementById("user-chip");
+  chip.textContent="👤 "+currentUser.u; chip.classList.remove("hidden");
+  ["btn-home","btn-import","btn-logout"].forEach(id=>document.getElementById(id).classList.remove("hidden"));
+  document.getElementById("btn-admin").classList.toggle("hidden", currentUser.role!=="admin");
+  goHome();
+}
+function logout(){
+  stopTimer(); currentUser=null; try{sessionStorage.removeItem(SS_SESSION);}catch(e){}
+  ["btn-home","btn-import","btn-logout","btn-admin"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  document.getElementById("user-chip").classList.add("hidden");
+  show("login");
+}
+function showAdmin(){ if(!currentUser||currentUser.role!=="admin"){flash("Chỉ admin mới vào được");return;} renderUsers(); show("admin"); }
+function addUser(){
+  if(!currentUser||currentUser.role!=="admin") return;
+  const u=val("nu-user").trim(), p=val("nu-pass"), isA=document.getElementById("nu-admin").checked;
+  const msg=document.getElementById("admin-msg");
+  if(!u||!p){ msg.innerHTML='<div class="msg err">Nhập đủ tên đăng nhập và mật khẩu.</div>'; return; }
+  if(allUsers().some(x=>x.u.toLowerCase()===u.toLowerCase())){ msg.innerHTML='<div class="msg err">Tên đăng nhập đã tồn tại.</div>'; return; }
+  const arr=loadUsers(); arr.push({u,p,role:isA?"admin":"user"}); saveUsers(arr);
+  document.getElementById("nu-user").value=""; document.getElementById("nu-pass").value=""; document.getElementById("nu-admin").checked=false;
+  msg.innerHTML='<div class="msg ok">Đã thêm tài khoản <b>'+esc(u)+'</b>.</div>'; renderUsers();
+}
+function deleteUser(i){
+  const arr=loadUsers(); if(i<0||i>=arr.length) return;
+  const name=arr[i].u; arr.splice(i,1); saveUsers(arr); renderUsers(); flash("Đã xoá "+name);
+}
+function renderUsers(){
+  const el=document.getElementById("user-list"); const custom=loadUsers(); const rows=[];
+  BUILTIN_USERS.forEach(x=>rows.push(`<div class="list-item"><div class="info"><b>${esc(x.u)}</b><span>Mặc định</span></div><div class="acts"><span class="role-tag role-${x.role}">${x.role==='admin'?'Admin':'Học viên'}</span></div></div>`));
+  custom.forEach((x,idx)=>rows.push(`<div class="list-item"><div class="info"><b>${esc(x.u)}</b><span>Đã thêm</span></div><div class="acts"><span class="role-tag role-${x.role}">${x.role==='admin'?'Admin':'Học viên'}</span><button class="btn btn-ghost mini" onclick="deleteUser(${idx})">🗑 Xoá</button></div></div>`));
+  el.innerHTML=rows.join("")||'<div class="hint">Chưa có tài khoản thêm ngoài danh sách mặc định.</div>';
+}
+
 /* ===== Init ===== */
-renderHome();
+(function init(){
+  try{ const s=JSON.parse(sessionStorage.getItem(SS_SESSION)||"null"); if(s&&s.u){ currentUser=s; afterLogin(); return; } }catch(e){}
+  show("login");
+})();
 </script>
 </body>
 </html>

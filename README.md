@@ -8,6 +8,15 @@ Web app tĩnh, chạy hoàn toàn trong trình duyệt (không cần server). H�
 - Chức năng: trộn câu/đáp án, chọn số câu, đặt giờ, điểm đạt, chấm điểm tự động, **xem lại đáp án đúng/sai**, làm lại.
 - **Thêm bộ đề mới** (nút "➕ Bộ đề mới"): dán đề Moodle, tải file `.json`/`.txt`, hoặc export JSON.
 
+
+## Tài khoản đăng nhập (V1.0 Final)
+Ứng dụng có màn hình đăng nhập. Tài khoản mặc định:
+- **admin / 123** — quyền quản trị: vào mục **👤 Quản lý user** để thêm/xoá tài khoản (lưu trong trình duyệt).
+- **test / 123** — tài khoản thử.
+- **VJC20477 … VJC20480, VJC20482, VJC20484** — mật khẩu **aloalo**.
+
+> Lưu ý bảo mật: đây là lớp đăng nhập nhẹ phía trình duyệt (mật khẩu nằm trong trang/localStorage), phù hợp để phân biệt học viên trên lớp — **không dùng cho dữ liệu nhạy cảm**. Tài khoản admin thêm vào chỉ lưu trên máy/trình duyệt đó.
+
 ## 2. Đưa lên GitHub Pages (5 phút)
 1. Tạo repo mới trên GitHub (VD: `vjaa-quiz`).
 2. Upload file `index.html` vào repo (và `README.md` nếu muốn).
