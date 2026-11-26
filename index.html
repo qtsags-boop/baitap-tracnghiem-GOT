@@ -1,0 +1,3132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khoa GOT – Bài tập tại lớp</title>
+<style>
+  :root{
+    --red:#ED1C24; --red-dark:#C20E1A; --red-deep:#8E0A12;
+    --yellow:#FFC20E; --yellow-soft:#FFE39A;
+    --ink:#1b1d29; --muted:#6b7280; --line:#e6e8ef;
+    --bg:#f4f5f9; --card:#ffffff;
+    --green:#1a9e5f; --green-bg:#e7f6ee;
+    --redx:#d4323a; --red-bg:#fdecee;
+    --shadow:0 10px 30px rgba(20,22,40,.08);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px 60px}
+  /* Header */
+  header.app{
+    background:linear-gradient(120deg,var(--red) 0%,var(--red-dark) 60%,var(--red-deep) 100%);
+    color:#fff;padding:18px 0 22px;position:relative;overflow:hidden;
+  }
+  header.app::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--yellow)}
+  header.app .wrap{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{
+    font-weight:800;font-size:20px;letter-spacing:.5px;background:#fff;color:var(--red);
+    padding:6px 10px;border-radius:9px;line-height:1;box-shadow:0 2px 0 var(--yellow)
+  }
+  .logo span{color:var(--yellow);-webkit-text-stroke:.3px var(--red)}
+  .brand .sub{font-size:13px;opacity:.95;font-weight:500}
+  .brand .ttl{font-size:17px;font-weight:700}
+  .top-actions button{
+    background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35);
+    padding:9px 14px;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px
+  }
+  .top-actions button:hover{background:rgba(255,255,255,.25)}
+  /* Cards / buttons */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;
+    font-weight:700;font-size:15px;padding:12px 20px;border-radius:12px;transition:.15s}
+  .btn-primary{background:var(--red);color:#fff}
+  .btn-primary:hover{background:var(--red-dark)}
+  .btn-ghost{background:#fff;color:var(--red);border:1.5px solid var(--red)}
+  .btn-ghost:hover{background:#fff5f5}
+  .btn-soft{background:#eef0f6;color:var(--ink)}
+  .btn-soft:hover{background:#e3e6f0}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-yellow{background:var(--yellow);color:#4a3600}
+  .btn-yellow:hover{filter:brightness(.96)}
+  h1,h2,h3{margin:0 0 .4em}
+  .section-title{margin:26px 0 12px;font-size:15px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .hidden{display:none !important}
+  /* Subject grid */
+  .subjects{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+  .subj{padding:20px;display:flex;flex-direction:column;gap:10px;position:relative}
+  .subj .badge{position:absolute;top:14px;right:14px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+  .badge-builtin{background:var(--yellow-soft);color:#7a5a00}
+  .badge-custom{background:#e5ecff;color:#2742b0}
+  .subj .ico{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--red),var(--red-deep));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px}
+  .subj .name{font-size:17px;font-weight:700;margin-top:2px}
+  .subj .meta{font-size:13px;color:var(--muted)}
+  .subj .row{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+  .subj .row .btn{flex:1;padding:10px 12px;font-size:14px}
+  /* Config */
+  .cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .field label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+  .field select,.field input{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;background:#fff}
+  .switch{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px}
+  .switch input{width:20px;height:20px;accent-color:var(--red)}
+  /* Quiz */
+  .quiz-top{position:sticky;top:0;z-index:30;background:var(--bg);padding-top:14px;margin-top:-4px}
+  .quiz-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;flex-wrap:wrap}
+  .progress{height:8px;background:#e9ebf3;border-radius:999px;overflow:hidden;margin-top:4px}
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--yellow),var(--red));width:0;transition:.3s}
+  .timer{font-weight:800;font-variant-numeric:tabular-nums;font-size:18px;color:var(--red);background:#fff;border:1.5px solid var(--line);padding:6px 12px;border-radius:10px}
+  .timer.warn{color:#fff;background:var(--red);border-color:var(--red);animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.6}}
+  .qbox{padding:22px 22px 10px}
+  .qnum{font-size:13px;font-weight:700;color:var(--red);letter-spacing:.4px}
+  .qtext{font-size:18px;font-weight:600;margin:6px 0 18px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;transition:.12s;background:#fff}
+  .opt:hover{border-color:var(--red);background:#fff7f7}
+  .opt.sel{border-color:var(--red);background:#fdecee;box-shadow:0 0 0 2px rgba(237,28,36,.12) inset}
+  .opt .k{width:28px;height:28px;flex:none;border-radius:8px;background:#eef0f6;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--muted)}
+  .opt.sel .k{background:var(--red);color:#fff}
+  .opt .t{flex:1;padding-top:3px}
+  /* review states */
+  .opt.correct{border-color:var(--green);background:var(--green-bg)}
+  .opt.correct .k{background:var(--green);color:#fff}
+  .opt.wrong{border-color:var(--redx);background:var(--red-bg)}
+  .opt.wrong .k{background:var(--redx);color:#fff}
+  .tag{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:8px}
+  .tag.ok{background:var(--green-bg);color:var(--green)}
+  .tag.no{background:var(--red-bg);color:var(--redx)}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-top:1px solid var(--line)}
+  /* palette */
+  .palette{display:flex;flex-wrap:wrap;gap:8px;padding:14px 18px;border-top:1px dashed var(--line)}
+  .pal{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--line);background:#fff;font-weight:700;cursor:pointer;color:var(--muted)}
+  .pal.answered{background:var(--yellow-soft);border-color:var(--yellow);color:#6b4e00}
+  .pal.current{outline:3px solid var(--red);outline-offset:1px;color:var(--red)}
+  .pal.correct{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+  .pal.wrong{background:var(--red-bg);border-color:var(--redx);color:var(--redx)}
+  /* result */
+  .result{padding:30px 24px;text-align:center}
+  .score-ring{width:170px;height:170px;border-radius:50%;margin:8px auto 14px;display:flex;align-items:center;justify-content:center;flex-direction:column;
+    background:conic-gradient(var(--c) calc(var(--p)*1%), #eceef5 0);}
+  .score-ring .inner{width:132px;height:132px;background:#fff;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .score-ring .pct{font-size:38px;font-weight:800;line-height:1}
+  .score-ring .lbl{font-size:12px;color:var(--muted);font-weight:600}
+  .verdict{display:inline-block;font-weight:800;font-size:18px;padding:8px 22px;border-radius:999px;margin:6px 0 14px}
+  .verdict.pass{background:var(--green-bg);color:var(--green)}
+  .verdict.fail{background:var(--red-bg);color:var(--redx)}
+  .stats{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin:8px 0 22px}
+  .stat{text-align:center}
+  .stat b{display:block;font-size:24px}
+  .stat span{font-size:13px;color:var(--muted)}
+  .result .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  /* import */
+  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .tabs .tabbtn{padding:9px 16px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-weight:600;cursor:pointer}
+  .tabs .tabbtn.active{background:var(--red);color:#fff;border-color:var(--red)}
+  textarea{width:100%;min-height:220px;padding:14px;border:1.5px solid var(--line);border-radius:12px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;resize:vertical}
+  .hint{font-size:13px;color:var(--muted);background:#f7f8fc;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+  code{background:#eef0f6;padding:1px 6px;border-radius:5px;font-size:13px}
+  .msg{padding:12px 14px;border-radius:10px;font-weight:600;margin:10px 0}
+  .msg.ok{background:var(--green-bg);color:var(--green)}
+  .msg.err{background:var(--red-bg);color:var(--redx)}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .list-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:#fff}
+  .list-item .info b{display:block}
+  .list-item .info span{font-size:13px;color:var(--muted)}
+  .list-item .acts{display:flex;gap:8px}
+  .mini{padding:8px 12px;font-size:13px;border-radius:9px}
+  footer.app{text-align:center;color:var(--muted);font-size:12.5px;padding:24px 16px}
+  .overlay{position:fixed;inset:0;background:rgba(20,22,40,.55);display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .overlay.show{display:flex}
+  .modal{background:#fff;border-radius:16px;max-width:400px;width:100%;padding:24px;box-shadow:var(--shadow)}
+  .modal-ttl{font-weight:800;font-size:18px;margin-bottom:8px}
+  .modal-body{color:var(--muted);margin-bottom:18px}
+  .modal-acts{display:flex;gap:10px;justify-content:flex-end}
+  .flash{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-weight:600;box-shadow:var(--shadow);z-index:100;opacity:0;transition:.25s;pointer-events:none}
+  .flash.show{opacity:1}
+  @media(max-width:560px){
+    .cfg-grid{grid-template-columns:1fr}
+    .qtext{font-size:16.5px}
+    .brand .ttl{display:none}
+  }
+</style>
+</head>
+<body>
+<header class="app">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">VIETJET<span>•</span></div>
+      <div>
+        <div class="ttl">Khoa GOT</div>
+        <div class="sub">Bài tập tại lớp</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="btn-home" onclick="goHome()">🏠 Trang chủ</button>
+      <button id="btn-import" onclick="showImport()">➕ Bộ đề mới</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="screen-home">
+    <div class="section-title">Chọn môn kiểm tra</div>
+    <div class="subjects" id="subject-grid"></div>
+  </section>
+
+  <!-- CONFIG -->
+  <section id="screen-config" class="hidden">
+    <div class="card" style="padding:24px">
+      <button class="btn btn-soft mini" onclick="goHome()">← Quay lại</button>
+      <h2 id="cfg-title" style="margin-top:14px">Thiết lập bài kiểm tra</h2>
+      <p class="meta" id="cfg-sub" style="color:var(--muted);margin-top:-6px"></p>
+      <div class="cfg-grid" style="margin-top:16px">
+        <div class="field">
+          <label>Số câu hỏi</label>
+          <select id="cfg-count"></select>
+        </div>
+        <div class="field">
+          <label>Thời gian làm bài</label>
+          <select id="cfg-time">
+            <option value="0">Không giới hạn</option>
+            <option value="5">5 phút</option>
+            <option value="10">10 phút</option>
+            <option value="15">15 phút</option>
+            <option value="20">20 phút</option>
+            <option value="30">30 phút</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Điểm đạt (%)</label>
+          <select id="cfg-pass">
+            <option value="50">50%</option>
+            <option value="60">60%</option>
+            <option value="70">70%</option>
+            <option value="80" selected>80%</option>
+            <option value="90">90%</option>
+            <option value="100">100%</option>
+          </select>
+        </div>
+        <div class="field" style="display:flex;flex-direction:column;gap:10px;justify-content:flex-end">
+          <label class="switch"><span>Trộn thứ tự câu hỏi</span><input type="checkbox" id="cfg-shuffleQ" checked></label>
+          <label class="switch"><span>Trộn thứ tự đáp án</span><input type="checkbox" id="cfg-shuffleA" checked></label>
+        </div>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="startQuiz()">🚀 Bắt đầu làm bài</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="screen-quiz" class="hidden">
+    <div class="quiz-top">
+      <div class="card quiz-bar">
+        <div>
+          <div style="font-weight:700" id="quiz-subject"></div>
+          <div class="meta" style="color:var(--muted);font-size:13px">Đã trả lời <b id="answered-count">0</b>/<span id="total-count">0</span></div>
+        </div>
+        <div id="timer" class="timer hidden">00:00</div>
+      </div>
+      <div class="progress"><i id="progress-bar"></i></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="qbox">
+        <div class="qnum" id="q-index"></div>
+        <div class="qtext" id="q-text"></div>
+        <div class="opts" id="q-options"></div>
+      </div>
+      <div class="palette" id="palette"></div>
+      <div class="nav">
+        <button class="btn btn-soft" id="prev-btn" onclick="prevQ()">← Câu trước</button>
+        <button class="btn btn-ghost" id="next-btn" onclick="nextQ()">Câu sau →</button>
+        <button class="btn btn-primary" id="submit-btn" onclick="confirmSubmit()">✔ Nộp bài</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="screen-result" class="hidden">
+    <div class="card result">
+      <div class="score-ring" id="score-ring"><div class="inner">
+        <div class="pct" id="score-pct">0%</div><div class="lbl" id="score-fraction"></div>
+      </div></div>
+      <div id="verdict" class="verdict">—</div>
+      <div class="stats">
+        <div class="stat"><b id="r-correct" style="color:var(--green)">0</b><span>Câu đúng</span></div>
+        <div class="stat"><b id="r-wrong" style="color:var(--redx)">0</b><span>Câu sai</span></div>
+        <div class="stat"><b id="r-blank">0</b><span>Bỏ trống</span></div>
+        <div class="stat"><b id="r-time">—</b><span>Thời gian</span></div>
+      </div>
+      <div class="row">
+        <button class="btn btn-primary" onclick="showReview()">🔍 Xem lại đáp án</button>
+        <button class="btn btn-ghost" onclick="retry()">↻ Làm lại</button>
+        <button class="btn btn-soft" onclick="goHome()">🏠 Trang chủ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEW -->
+  <section id="screen-review" class="hidden">
+    <div class="card quiz-bar" style="margin-bottom:14px">
+      <h2 style="margin:0">Xem lại bài làm</h2>
+      <button class="btn btn-soft mini" onclick="backToResult()">← Kết quả</button>
+    </div>
+    <div id="review-list"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="retry()">↻ Làm lại</button>
+      <button class="btn btn-soft" onclick="goHome()">🏠 Trang chủ</button>
+    </div>
+  </section>
+
+  <!-- IMPORT -->
+  <section id="screen-import" class="hidden">
+    <div class="card" style="padding:24px">
+      <button class="btn btn-soft mini" onclick="goHome()">← Quay lại</button>
+      <h2 style="margin-top:14px">Thêm bộ đề / môn học mới</h2>
+      <div class="tabs" style="margin-top:14px">
+        <button class="tabbtn active" data-tab="paste" onclick="switchTab('paste')">📋 Dán đề (Moodle)</button>
+        <button class="tabbtn" data-tab="file" onclick="switchTab('file')">📁 Tải file (.json/.txt)</button>
+        <button class="tabbtn" data-tab="manage" onclick="switchTab('manage')">🗂 Quản lý môn đã thêm</button>
+      </div>
+
+      <div id="tab-paste">
+        <div class="hint">Dán nguyên văn đề trắc nghiệm theo định dạng Moodle (có dòng <code>Select one:</code>, các đáp án <code>a. … b. …</code> và dòng <code>The correct answer is: …</code>). Hệ thống tự tách câu hỏi và đáp án đúng.</div>
+        <div class="field" style="margin-bottom:10px"><label>Tên môn / bài kiểm tra</label><input id="imp-name" placeholder="VD: Dangerous Goods Awareness"></div>
+        <textarea id="imp-text" placeholder="Question 1&#10;...&#10;100. Câu hỏi...&#10;Select one:&#10;a. ...&#10;b. ...&#10;The correct answer is: ..."></textarea>
+        <div id="paste-msg"></div>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-ghost" onclick="analyzePaste()">🔎 Phân tích</button>
+          <button class="btn btn-primary" id="save-paste" onclick="savePaste()" disabled>💾 Lưu môn này</button>
+        </div>
+      </div>
+
+      <div id="tab-file" class="hidden">
+        <div class="hint">Tải lên file <code>.json</code> (theo schema bên dưới) hoặc file <code>.txt</code> đề Moodle. File JSON có thể export sẵn từ môn khác để commit vào repo GitHub.</div>
+        <input type="file" id="imp-file" accept=".json,.txt" onchange="handleFile(event)">
+        <div id="file-msg"></div>
+        <div class="hint" style="margin-top:14px"><b>Schema JSON:</b><br>
+<code>{ "name": "Tên môn", "questions": [ { "q": "Câu hỏi?", "options": ["A","B","C"], "answer": 0 } ] }</code><br>
+<span style="font-size:12px">(<code>answer</code> là chỉ số đáp án đúng, bắt đầu từ 0)</span></div>
+      </div>
+
+      <div id="tab-manage" class="hidden">
+        <div id="manage-list"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="app">
+  Khoa GOT — Bài tập tại lớp • Chạy offline trên trình duyệt
+</footer>
+
+<div class="overlay" id="confirm-overlay">
+  <div class="modal">
+    <div class="modal-ttl">Nộp bài</div>
+    <div class="modal-body" id="confirm-text"></div>
+    <div class="modal-acts">
+      <button class="btn btn-soft" onclick="cancelSubmit()">Quay lại làm tiếp</button>
+      <button class="btn btn-primary" onclick="doSubmitConfirmed()">✔ Nộp bài</button>
+    </div>
+  </div>
+</div>
+<div class="flash" id="flash"></div>
+
+<script>
+/* ===== Built-in subjects (embedded) ===== */
+const BUILTIN_SUBJECTS = [
+  {
+    "name": "Bài kiểm tra giữa môn môn ALS 40 câu",
+    "note": "Giữa môn ALS",
+    "questions": [
+      {
+        "q": "Không chất các kiện hàng nặng lên bên trên các kiện hàng khác để tránh làm hư hỏng kiện hàng bên dưới?",
+        "options": [
+          "Đúng",
+          "Sai"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Trước khi đóng cửa hầm hàng, cần phải chắc chắn rằng?",
+        "options": [
+          "Tất cả các đèn hầm hàng đã được tắt",
+          "Kiểm tra cửa và khung viền cửa không bị hư hỏng",
+          "Tất cả các lưới cửa đã được cài đúng quy định",
+          "Cả A B và C đều đúng."
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trong 3 chữ cái đầu của ULD, chữ cái thứ nhất là \"P\" chỉ loại ULD nào?",
+        "options": [
+          "Thùng chuẩn",
+          "Thùng không chuẩn",
+          "Mâm chuẩn",
+          "Tất cả đều đúng"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Khi chất xếp hàng hóa nguy hiểm cần phải chú ý điều gì?",
+        "options": [
+          "Tất cả các kiện hàng nguy hiểm phải được xếp thẳng đứng theo chỉ dẫn",
+          "Nhãn hàng nguy hiểm ở vị trí dễ nhậnthấy",
+          "Phải được chốt giữ để ngăn chặn bất cứ xê dịch nào cũng như tránh được việc va chạm gây hư hại với các hàng khác",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hàng hóa, hành lý như thế nào thì được gọi là hàng ướt?",
+        "options": [
+          "Hàng hoá là chất lỏng chở trong thùng kín nước;",
+          "Hàng thuộc loại ướt nhưng không đóng vào thùng kín nước, ví dụ: cá, tôm, cua đông lạnh, thịt đông hoặc thịt tươi, da chưa thuộc, ...;",
+          "Hàng có thể sinh ra ra nước, ví dụ như động vật sống.",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Cách thức phục vụ hàng ướt như thế nào là đúng?",
+        "options": [
+          "Phải được bảo vệ bằng các polyethylen hoặc vải dầu để giữ lại mọi rò rỉ hay tràn đổ",
+          "Các thùng chứa hàng hoá ướt phải được chất xếp và cố định theo phương thẳng đứng",
+          "Hàng hoá ướt nếu xếp chồng nhiều lớp phải có sự quan tâm đặc biệt để tránh đè nát các thùng chứa ở dưới thấp",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên thực hiện như thế nào là đúng quy định?",
+        "options": [
+          "Trong quá trình chất xếp, nhân viên bốc xếp phải kiểm tra tem an ninh, nhãn hàng hóa.. nhằm đảm bảo hành lý/hàng hóa được chất lên đúng chuyến bay đang phục vụ và các yêu cầu như đề cập bên trên.",
+          "Nhân viên chất xếp tuân thủ nguyên tắc kiện nặng chất trước, kiện nhẹ chất sau và chất từ trong ra ngoài, hành lý khách VIP, CIP, SKYBOSS, Rush Bag, hành lý nối chuyến và hành lý ưu tiên được chất sau cùng.",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Trước khi cảnh giới cho tàu bay vào vị trí thì nhân viên phải làm gì?",
+        "options": [
+          "Gậy cây(không có đèn): Màu cam phép được dùng dưới ánh sáng ban ngày.",
+          "Gậy có đèn: Được dùng chủ yếu ban đêm hay khi tầm nhìn thấp, tuy nhiên vẫn có thể dùng vào ban ngày",
+          "Kiểm tra gậy có đèn nhằm đảm bảo tình trạng hoạt động tốt.",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi cảnh giới cho tàu bay vào vị trí thì nhân viên phải làm gì?",
+        "options": [
+          "Kiểm tra FOD trong vòng 7,5m",
+          "Vị trí đỗ, lối di chuyển đầu cánh tàu bay di chuyển thông thoáng không có chướng ngài vật cản trở",
+          "Không cho phép phương tiện, thiết bị vào khu vực giới hạn an toàn 7,5m",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên di chuyển Wing Walker như thế nào là đúng?",
+        "options": [
+          "2 nhân viên Wing Walker đi dọc theo vạch giới hạn an toàn khu vực an toàn bãi đỗ tàu bay (7,5m), trông coi và đảm báo chắc chắn rằng đường đi chuyển của tàu bay được thông thoáng không có chướng ngại vật cản trở.",
+          "Nhân viên Wing Walker phải đứng ngoài vạch giới hạn ngay góc với đường công vụ để kiểm soát phương tiện di chuyển và ra tín hiệu cho phép máy bay vào vị trí đậu.",
+          "Nhân viên Wing Walker phải di chuyển dọc theo vạch giới hạn an toàn, cách vạch 1m và nhìn trông coi đảm bảo thông thoáng không có chướng ngại vật đến khi tàu bay đừng lại tại vạch đỗ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên di chuyển Wing Walker như thế nào là đúng?",
+        "options": [
+          "2 nhân viên Wing-Walker đi dọc theo vạch giới hạn an toàn, cách vạch 1m đảm bảo chắc chắn đường di chuyển của tàu bay thông thoáng, không có chướng ngại vật và ra tín hiệu cho phép đẩy tàu bay ra vị trí khởi hành",
+          "Khi xe kéo đẩy tàu bay bắt đầu khởi hành, nhìn và trông coi đầu cánh (wingtips) đảm bảo thông thoáng không có chướng ngại vật cho đến khi máy bay được đẩy ra khỏi bãi đỗ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Bạn phải chú ý điều gì trước khi đóng cửa hầm hàng?",
+        "options": [
+          "Hệ thống khóa hầm hàng và lưới bảo vệ được dựng lên đúng vị trí",
+          "Đèn khoang hàng hóa phải được tắt trừ khi có quy định khắc",
+          "Khu vực xung quanh cửa bao gồm các bệ cửa và khung cửa không được dính sỏi, nước, nước đá và các chất lạ khác hoặc có chướng ngại vật",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Có thể chèn cứng hành lý,hàng hóa vào vách hầm hàng và chất xếp quá vạch giới hạn chiều cao trong hầm hàng?",
+        "options": [
+          "Đúng",
+          "Sai",
+          "Chỉ khi nhân viên HDCX yêu cầu"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Cửa hầm hàng trước của tàu A320 nằm ở phần khoang nào?",
+        "options": [
+          "11",
+          "12",
+          "13",
+          "21"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Cửa hầm hàng trước của tàu A321 nằm ở phần khoang nào?",
+        "options": [
+          "11",
+          "12",
+          "21",
+          "22"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Cửa hầm sau tàu bay A320 nằm ở phần khoang nào?",
+        "options": [
+          "11",
+          "12",
+          "41",
+          "42"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Cửa hầm sau tàu bay A321 nằm ở phần khoang nào?",
+        "options": [
+          "31",
+          "32",
+          "41",
+          "42"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Để tránh bị động cơ tàu bay hút, nhân viên chèn bánh phải tiếp cận bánh mũi tàu bay theo hướng nào?",
+        "options": [
+          "Tiếp cận bánh mũi tàu bay từ hướng mũi tàu bay",
+          "Tiếp cận bánh mũi tàu bay từ hướng của cánh tàu bay",
+          "Tiếp cận bánh mũi tàu bay từ hướng góc xiêng 45 độ"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Hầm hàng tàu bay A320 gồm các phần khoang nào?",
+        "options": [
+          "Phần khoang 11,12,13",
+          "Phần khoang 31,32, 41, 42",
+          "Khoang hầm 5",
+          "Tất cả các đáp án trên A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hầm hàng tàu bay A321 gồm các phần khoang nào?",
+        "options": [
+          "Phần Khoang 11,12, 21, 22, 23",
+          "Phần Khoang 31,32, 33, 41, 42",
+          "Khoang hầm 5",
+          "Tất cả các đáp án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hầm trước A330-300 có thể chất được tối đa bao nhiêu MÂM PMC và vị trí nào?",
+        "options": [
+          "6 PMC: 11P,12P,21P,22P,23P,24P",
+          "9 PMC: 11,12,13,21,22,23,24,25,26",
+          "6 PMC: 11P,12P,13P,21P,22P,23P",
+          "4 PMC: 31P,32P,41P,42P"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Hàng hoá như thế nào sẽ không được chất xếp lên máy bay?",
+        "options": [
+          "Không được đóng gói một cách hợp lý",
+          "Có thể là nguyên nhân gây hư hại máy bay hoặc các hàng hoá khác",
+          "Làm hỏng, bẩn máy bay hay các hàng hoá khác",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay chất rời thì cần các loại điện văn nào?",
+        "options": [
+          "2 loại: MVT và LDM",
+          "3 loại: MVT và UCM",
+          "1 loại: CPM",
+          "1 loại: UCM"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khi có hành lý rơi ra sàn tàu bay thì bạn phải làm gì?",
+        "options": [
+          "Báo cho nhân viên đầu kéo",
+          "Báo cho nhân viên giám sát",
+          "Báo cho Tiếp viên Trưởng",
+          "Báo cho nhân viên Thông thoại"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khi đóng cửa hầm hàng xong bạn phải làm gì?",
+        "options": [
+          "Đóng cửa bình thường",
+          "Báo cho nhân viên giám sát.",
+          "Báo cho nhân viên Thông thoại",
+          "Kiểm tra lại toàn bộ cửa hầm hàng, bằng cách dùng ngón tay chỏ chỉ 4 góc của cửa từ trái qua phải"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nào được đóng chèn bánh mũi tàu bay đến?",
+        "options": [
+          "Khi tàu đã vào vị trí dừng hẳn",
+          "Động cơ chính đã tắt",
+          "Đèn chống va chạm đã tắt, và có tín hiệu của thợ máy",
+          "Tất cả các đáp án trên A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nào được đóng chèn bánh sau (càng chính) tàu bay đến?",
+        "options": [
+          "Khi tàu đã vào vị trí dừng hẳn",
+          "Động cơ chính đã tắt",
+          "Đèn chống va chạm đã tắt và có tín hiệu của thợ máy và đã đóng chèn bánh mũi",
+          "Tất cả các đáp án trên A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nào được phép đặt chóp an toàn?",
+        "options": [
+          "Khi đã đóng chèn xong",
+          "Khi trang thiết bị đã tiếp cận",
+          "Khi tàu bay vào vị trí dừng hẳn",
+          "Khi tàu đã tắt đèn chống va chạm"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khi nào được phép thu chóp an toàn?",
+        "options": [
+          "Khi đã đóng các cửa hầm hàng",
+          "Khi tất cả các trang thiết bị đã rút khỏi tàu bay",
+          "Khi tàu bay bắt đầu lăn",
+          "Khi tàu đã bật đèn chống va chạm"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Nhân viên thực hiện như thế nào là đúng quy định?",
+        "options": [
+          "Các kiện hàng có gắn thẻ phục vụ đặc biệt như hàng dễ vỡ, hàng tươi sống, hàng có gắn thẻ định hướng... phải tuân thủ việc chất xếp đúng theo quy định và hướng dẫn của nhân viên HDCX.",
+          "Không chèn cứng hành lý và hàng hóa vào vách hầm hàng và không chất xếp hành lý hoặc hàng hóa quá vạch giới hạn chiều cao trong hầm hàng.",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Mục đích sử dụng các thanh dàn lực để làm gì?",
+        "options": [
+          "Để giúp cố định kiện hàng nặng khi bay",
+          "Để tận dụng thể tích chất xếp còn lại trong phạm vi thanh dàn lực",
+          "Để chất xếp thêm các kiện hàng khác trong phạm vi thanh dàn lực",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Luôn phải rất cẩn thận khi mở hay đóng của hầm hàng, Ai là người được phép đóng mở cửa hầm hàng?",
+        "options": [
+          "Tất cả nhân viên sân đỗ",
+          "Nhân viên hướng dẫn chất xếp",
+          "Nhân viên sân đỗ đã được qua đào tạo và cấp chứng chỉ",
+          "Tất cả đều đúng"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Nguyên tắc chất xếp hầm hàng rời như thế nào là đúng?",
+        "options": [
+          "Chất xếp lần lượt khoang hàng 2,1,3,5,4",
+          "Chất khoang hàng 1 trước",
+          "Chất xếp khoang hàng 4 trước",
+          "Chất xếp khoang hàng 5 trước"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Nhân viên bốc xếp tại tàu bay phải có mặt tại vị trí phục vụ trước bao nhiêu phút trước khi tàu bay đáp?",
+        "options": [
+          "05 phút",
+          "10 phút",
+          "12 phút",
+          "15 phút"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Nhân viên cảnh giới cánh tàu bay cần bao nhiêu gậy cảnh giới an toàn (gậy phản quang)?",
+        "options": [
+          "01 gậy",
+          "02 gậy",
+          "03 gậy",
+          "04 gậy"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên cảnh giới cánh tàu bay khi làm việc ban đêm hay thời tiết xấu thì phải làm gi?",
+        "options": [
+          "Luôn bật sáng đèn gậy cảnh giới an toàn",
+          "Thực hiện cảnh giới bình thường",
+          "Có mặt tại vị trí phục vụ 10 phút trước khi tàu bay đáp",
+          "Đáp an A, C đúng, B sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Bốn (04) vị trí cần đặt chóp an toàn bổ sung khi tàu bay đỗ cạnh đường công vụ là các vị trí nào?",
+        "options": [
+          "Phía trước mỗi động cơ",
+          "Mũi và đuôi tàu bay",
+          "Hai đầu cánh tàu bay",
+          "Đáp án, B & C đúng, A sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi bắt đầu tiến hành chất hàng lên máy bay cần lưu ý gì?",
+        "options": [
+          "Sàn, tường, và vách ngăn của máy bay ở trạng thái điều kiện tốt",
+          "Đảm bảo các lưới ngăn cách dùng để chia nhỏ hầm hàng, khoang hàng được lắp chắc chắn, đúng vị trí.",
+          "Lối tiếp cận bảng điều khiển và cửa sập của sàn cabin không bị cản trở",
+          "Tất cả đều đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi chất xếp hàng hóa tươi sống lên hầm hàng thì bạn phải làm gì?",
+        "options": [
+          "Lót tầm Nilon hình phễu trên hầm hàng",
+          "Lót tầm giấy lên trên tầm Nilon.",
+          "Chất xếp hàng theo đúng chiều mũi tên",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi đóng cửa hầm hàng thì bạn phải làm gì?",
+        "options": [
+          "Kiểm tra chướng ngại vật tại cửa hầm hàng",
+          "Kiểm tra khóa chốt, lưới cửa hầm hàng",
+          "Kiểm tra mép cửa hầm hàng",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      }
+    ]
+  },
+  {
+    "name": "ALS – Đầu băng chuyền (BHS)",
+    "note": "OCR từ PDF",
+    "questions": [
+      {
+        "q": "Bạn hãy cho biết thế nào là kiện hành lý đúng quy định?",
+        "options": [
+          "Có thẻ hành lý",
+          "Đóng gói đúng quy định",
+          "Không chảy nước hoặc rách vỡ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Bạn phục vụ kiện hành lý có nhãn mác là hàng hóa nguy hiểm, nhưng bạn chưa nhận được thông tin từ PVHK thì phải làm gì?",
+        "options": [
+          "Báo ngay cho nhân viên PVHK",
+          "Báo cho ca trưởng/ kíp trưởng",
+          "Báo cho nhân viên giám sát",
+          "Câu A và B đúng",
+          "Tất cả A,B,C đúng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Các bước tiếp nhận hành lý như thế nào là đúng quy định?",
+        "options": [
+          "Kiểm tra kiện hành lý đúng quy cách",
+          "Dùng tay trái kéo dài thẻ",
+          "Dùng ngón tay phải chỉ vào số hiệu chuyến bay, đường bay",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Các bước tiếp nhận hành lý như thế nào là đúng quy định?",
+        "options": [
+          "Phù hợp với chuyến bay mình đang phục vụ",
+          "Dùng tay thuận xé thẻ lưu, tiến hành dán thẻ lưu vào bingo",
+          "Cả A và B Ổ"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Cách thức chất xếp hành lý đặc biệt như thế nào là đúng?",
+        "options": [
+          "Nhận dạng kiện hành lý qua nhãn mác",
+          "Kiện hành lý đầy đủ nhãn mác",
+          "Chất xếp cần thận",
+          "Tất cả các phương án trên :"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Chữ B được thể hiện trên điện văn là gì?",
+        "options": [
+          "Hành lý",
+          "Hàng hóa",
+          "Túi thư",
+          "Thiết bị sửa chữa tàu bay"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Chữ C được thể hiện trên điện văn là gì?",
+        "options": [
+          "Hành lý",
+          "Hàng hóa",
+          "Túi thư",
+          "Thiết bị sửa chữa tàu bay"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Chữ D được thể hiện trên điện văn là gì?",
+        "options": [
+          "Hành lý nối chuyến",
+          "Hành lý đoàn",
+          "Hành lý ưu tiên",
+          "Hành lý tổ bay"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Chữ E được thể hiện trên điện văn là gì?",
+        "options": [
+          "Hành lý",
+          "Hàng hóa",
+          "Túi thư",
+          "Thiết bị sửa chữa tàu bay"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Chữ M được thể hiện trên điện văn là gì?",
+        "options": [
+          "Hành lý",
+          "Hàng hóa",
+          "Túi thư",
+          "Thiết bị sửa chữa tàu bay"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Chữ N được thể hiện trên điện văn là gì?",
+        "options": [
+          "Hành lý nối chuyến",
+          "Vị trí trống",
+          "Hành lý ưu tiên",
+          "Hành lý tổ bay"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Chữ SKB, J,F được thể hiện trên điện văn là gì?",
+        "options": [
+          "Hành lý thường",
+          "Hành lý đoàn",
+          "Hành lý ưu tiên",
+          "Hành lý nối chuyến"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Chữ T được thể hiện trên điện văn là gì?",
+        "options": [
+          "Hành lý nối chuyến",
+          "Hành lý đoàn",
+          "Hành lý ưu tiên",
+          "Hành lý tổ bay"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Chữ X được thể hiện trên điện văn là gì?",
+        "options": [
+          "Vị trí có chất thùng mâm rỗng",
+          "Vị trí chất thùng mâm có hàng",
+          "Vị trí chất thùng mâm có hành lý"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Dán bao nhiêu kiện trên Bingo thì các bạn phải kiểm tra lại 1 lần?",
+        "options": [
+          "Từ 01 đến 05 kiện",
+          "Từ 05 đến 10 kiện",
+          "Từ 10 đến 15 kiện"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Điện CPM (Container/Pallet message) trong ngành hàng không để làm gì?",
+        "options": [
+          "Thông báo các thông số cụ thể của tải chất xếp trong khoang hàng (vị trí,số hiệu, trọng lượng ....)",
+          "Thời gian bay còn lại",
+          "Thời gian bay",
+          "Thông báo khách thiếu hành lý"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Điện LDM (Load distribution message) trong ngành hàng không để làm gì?",
+        "options": [
+          "Dùng để thông báo cho các sân bay liên quan thông tin về phân bố tải cũng như trọng lượng của chúng",
+          "Thời gian cất hạ cánh",
+          "Thời gian bay",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Điện MVT (Moverment message) trong ngành hành không để làm gì?",
+        "options": [
+          "Dùng để thông báo thời gian cất hạ cánh của chuyến bay",
+          "Dùng để chỉ trọng lượng chuyên chở của tàu bay",
+          "Thời gian bay",
+          "Thông báo khách già yếu"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Giờ địa phương (LCT) trong ngành hành không sử dụng với mục đích nào?",
+        "options": [
+          "Chỉ sử dụng trong kế hoạch bay",
+          "Chỉ sử dụng trong điện văn _",
+          "Sử dụng để gửi điện văn",
+          "Cả A và B đúng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Giờ quốc tế (GMT)trong ngành hàng không sử dụng với mục đích gì?",
+        "options": [
+          "Chỉ sử dụng trong kế hoạch bay",
+          "Chỉ sử dụng trong điện văn",
+          "Sử dụng để gửi điện văn",
+          "Cả A và B đúng"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Hành lý vô chủ thì báo ai?",
+        "options": [
+          "Báo cho nhân viên phục vụ hành khách đi",
+          "Tiến hành lập biên bản",
+          "Đóng gói lại cho đi",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Hướng dẫn tiếp nhận hành lý nối chuyến như nào là đúng?",
+        "options": [
+          "Phân tách sơ bộ tại đầu băng chuyền",
+          "Bàn giao cho nhân viên phục vụ hành khách đến",
+          "Bàn giao cho nhân viên PVHL chuyến bay đi",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hướng dẫn tiếp nhận hành lý quá khổ như thế nào là đúng?",
+        "options": [
+          "Nhận thông tin từ nhân viên hành khách",
+          "Di chuyển đến vị trí tiếp nhận hành lý QK( theo quy định)",
+          "Kiểm soát tổng số kiện hành lý",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hướng dẫn tiếp nhận hành lý quá khổ như thế nào là đúng?",
+        "options": [
+          "Kiểm soát thời gian giao nhận",
+          "Ghi chép số thẻ vào BM tiếp nhận hành lý quá khổ",
+          "Kiểm tra tình trạng các kiện hành lý",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hướng dẫn tiếp nhận hành lý quá khỗ như thế nào là đúng?",
+        "options": [
+          "Yêu cầu PVHK ký nhận vào BM của BX",
+          "Kiểm tra số liệu khớp với PVHK",
+          "Khớp số liệu, thời gian bàn giao của PVHK và ký nhận",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn chất xếp 1 kiện hành lý thì bạn cần phải chú ý điều gì?",
+        "options": [
+          "Kiểm tra mức độ ưu tiên của kiện hành lý",
+          "Kiểm tra nhãn mác của kiện hành lý",
+          "Chất xếp bình thường",
+          "Câu A và B đúng",
+          "Tất cả A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn đang chất xếp mà có 1 kiện hành lý bị rò rỉ thì bạn phải làm gì?",
+        "options": [
+          "Dỡ kiện đó xuống khỏi chuồng hành lý",
+          "Tách riêng kiện hành lý",
+          "Báo cho nhân viên PVHK đi",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn đang phục vụ hành lý mà Cục hàng không yêu cầu bàn giao kiện hành lý cho họ thì bạn có bàn giao không?",
+        "options": [
+          "Có bàn giao",
+          "Không bàn giao"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khi bạn đang phục vụ hành lý mà nhân viên an ninh cơ động yêu cầu bàn giao kiện hành lý cho họ thì bạn có bàn giao không?",
+        "options": [
+          "Có, bàn giao bình thường",
+          "Không bàn giao"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khi bạn đi lấy hành lý quá khổ thì bạn phải chuẩn bị những gì?",
+        "options": [
+          "Chuẩn bị sổ bàn giao hành lý quá khổ",
+          "Gọi lái xe đầu kéo",
+          "Nhận thông tin từ nhân viên phục vụ hành khách đi",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay đến bạn phải chuẩn bị những công cụ và việc gì?",
+        "options": [
+          "Công cụ dụng cụ",
+          "Bảo hộ lao động",
+          "Lập phương án phục vụ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay đến bạn phải chuẩn bị những thông tin gì?",
+        "options": [
+          "Thu thập thông tin chuyến bay",
+          "Loại máy bay",
+          "Số hiệu chuyến bay",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay đến bạn phải chuẩn những việc gì?",
+        "options": [
+          "Nhân viên làm cùng",
+          "Các loại điện văn liên quan",
+          "Vị trí trả hành lý",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay sử dụng ULD thì bạn cần máy loại điện văn?",
+        "options": [
+          "1",
+          "2",
+          "",
+          "4"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay sử dụng ULD thì bạn cần những loại điện văn nào?",
+        "options": [
+          "Điện văn CPM",
+          "Điện văn LDM",
+          "điện văn MVT",
+          "Đáp án A, C đúng, B sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nhân viên phục vụ hành khách báo kết số thì bạn phải làm gì?",
+        "options": [
+          "Thu thập bingo",
+          "Cộng lại số lượng",
+          "Báo các bộ phận liên quan",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nhân viên PVHK báo cắt lại kiện hành lý thì bạn làm gì?",
+        "options": [
+          "Nhận thông tin từ nhân viên hành khách",
+          "Tìm kiếm kiện hành lý",
+          "Đối chiếu lại thông tin với nhân viên PVHK",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nhân viên PVHK muốn lấy lại kiện hành lý thì phải làm gì?",
+        "options": [
+          "Nhận thông tin từ nhân viên hành khách",
+          "Báo an ninh cơ động",
+          "Lập biên bản bàn giao",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi phục vụ chuyến bay của VJ mà chất xếp rời thì bạn cần mấy loại điện văn?",
+        "options": [
+          "†1",
+          "2",
+          "3",
+          "4"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khi phục vụ chuyến bay của VJ mà chất xếp rời thì bạn cần những loại điện nào?",
+        "options": [
+          "Điện văn CPM",
+          "Điện văn LDM",
+          "Điện văm MVT",
+          "Đáp án B, C đúng, A sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi phục vụ hành lý chuyến bay đi thì bạn phải chuẩn bị những gì?",
+        "options": [
+          "Thẻ cắm thùng",
+          "Bingo",
+          "Checklist và sổ bàn giao hành lý quá khổ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi phục vụ hành lý đến nếu thấy kiện hành lý rách vỡ, ẩm ướt thì báo cho ai?",
+        "options": [
+          "Báo cho nhân viên hành khách đi",
+          "Báo nhân viên giám sát",
+          "Báo nhân viên phục vụ hành khách đến",
+          "Báo cho ca trưởng"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Khi trả hành lý đến bạn phải có mặt trước bao nhiêu phút?",
+        "options": [
+          "10 phút",
+          "12 phút",
+          "15 PHÚT",
+          "20 phút"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi trả hành lý mà bạn phát hiện có đồ vật rơi ra mà không xác định được của kiện nào thì bạn làm gì?",
+        "options": [
+          "Thu gom lại và đưa vào các kiện bất kỳ",
+          "Để tại thùng mâm",
+          "Thu gom lại báo cho nhân viên PVHK đến lập biên bản",
+          "Báo cho ca trưởng"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Khi trả hết hành lý thì chúng ta phải làm gì?",
+        "options": [
+          "Kiểm tra kiện nhỏ trong khe thùng hoặc chỗ khó quan sát",
+          "Kiểm tra băng chuyền lần cuối",
+          "Móc nối dolly và ghi chép vào BM",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Kiện hành lý như thế nào thì được coi là kiện hành lý nối chuyến?",
+        "options": [
+          "Kiện hành lý có thẻ hành lý",
+          "Kiện hành lý có từ 2 chặng trở lên",
+          "Kiện hành lý đầy đủ nhãn mác",
+          "Kiện hành lý có thẻ dễ vỡ"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Nếu bạn kết sổ mà chuyến bay thừa hành lý thì bạn phải làm gì?",
+        "options": [
+          "Kiểm tra lại bingo",
+          "Cộng lại bingo",
+          "Kiểm tra lại các kiện hành lý ghi tay",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nếu bạn kết số mà hành lý lệch thiếu thì bạn phải làm gì?",
+        "options": [
+          "Cộng lại bingo",
+          "Kiểm tra lại xung quanh đảo hành lý",
+          "Kiểm tra lại hành lý của các chuyến bay khác",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nếu bạn xé và lưu nhầm chuyến bay thì bạn phải làm gi?",
+        "options": [
+          "Tìm và offload kiện hành lý xuống",
+          "Tháo thẻ lưu trên bingo | 10",
+          "Báo cho nhân viên hành khách",
+          "Câu A và B đúng",
+          "Tất cả A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nếu kiện hành lý bị mắt thẻ nhỏ để lưu thì làm thế nào?",
+        "options": [
+          "Kiểm tra thẻ to chắc chắn là chuyến bay mình đang phục vụ",
+          "Ghi đầy đủ số thẻ lên bingo",
+          "Kiểm tra lại số hiệu chuyến bay",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Tại sao khi chúng ta trả hết thùng hành lý nào thì chúng ta phải gạch số thùng đó trên điện văn CPM nhầm mục đích gì?",
+        "options": [
+          "Đề báo cho nhân viên PVHK",
+          "Để kiểm soát thùng đó đã được trả hết",
+          "Báo cho nhân viên giám sát",
+          "Báo cho ca trưởng"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Thẻ FRAGILE dùng để làm gì?",
+        "options": [
+          "Dùng để dán lên các kiện hành lý nặng",
+          "Dùng để dán lên các kiện có đồ dễ vỡ như thủy tinh",
+          "Dùng để dán lên các kiện hành lý mau hỏng",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Thẻ HEAVY dùng để làm gì?",
+        "options": [
+          "Dùng dán lên các kiện hành lý nặng trên 32 kg",
+          "Dùng để dán lên các kiện có đồ dễ vỡ như thủy",
+          "Dùng đề dán lên các kiện hành lý mau hỏng",
+          "Dùng dán lên các kiện hành lý có hàng tươi sống"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Thẻ LIVE ANIMALS dùng để làm gì? +*",
+        "options": [
+          "Dùng dán lên các kiện hành lý nặng trên 32 kg",
+          "Dùng để dán lên các kiện có đồ dễ vỡ như thủy tinh",
+          "Dùng để dán lên các kiện hành lý mau hỏng",
+          "Dùng dán lên các kiện hành lý có hàng tươi sống"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Thẻ MASS dùng để làm gì?",
+        "options": [
+          "Dùng để buộc hành lý dành cho người cần sự trợ giúp",
+          "Là đồ sửa chữa thiết bị trên tàu bay",
+          "Là hành lý tổ bay",
+          "Hành lý đoàn"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Thẻ Rush là gì?",
+        "options": [
+          "Là hành lý chậm chuyến",
+          "Là hành lý nối chuyến",
+          "Là hành lý đoàn",
+          "Là hành lý tổ bay"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Thẻ Skyboss là gì?",
+        "options": [
+          "Là thẻ hành lý báo hiệu có khách đoàn",
+          "Là thẻ dành cho người già",
+          "Là thẻ dành cho khách ưu tiên",
+          "Là thẻ dành cho tổ bay"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Thẻ UM dùng để làm gì?",
+        "options": [
+          "Dùng để buộc vào hành lý của trẻ em dưới 12 tuổi",
+          "Dùng để buộc vào hành lý cho trẻ trên 12 tuôi",
+          "Dùng buộc vào hành lý cho người già",
+          "Dùng buộc vào hành lý tổ bay"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Thời gian có mặt tại đảo hành lý đi trước khi PVHK checkin là bao nhiêu phút?",
+        "options": [
+          "ít nhất là 10 phút",
+          "ít nhất là 12 phút",
+          "ít nhất là 15 phút",
+          "ít nhất là 18 phút"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Trả hành lý đến mà có kiện hành lý quá nhỏ hoặc quá to thì bạn phải trả như thế nào?",
+        "options": [
+          "Trả vào băng chuyền bình thường",
+          "Báo cho nhân viên PVHK",
+          "Trả theo đường quá khổ",
+          "Báo khai thác ga"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Trả hành lý như thế nào là đúng quy định thứ tự ưu tiên?",
+        "options": [
+          "VỊPA, BJ,BF,BP,BC,BD,BT,B",
+          "VIPA, BJ,BF,BP,BC,BD,BT,B",
+          "VIPA, BF,B.J,BP,BC,BT,BD,B",
+          "BF,VIP A,BJ,BP,BC,BD,BT,B"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Xử lý kiện hành lý rách vỡ như thế nào là đúng quy định?",
+        "options": [
+          "Báo cho nhân viên PVHK đi",
+          "Tiến hành lập biên bản",
+          "Đóng gói lại cho đi",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi nhận nhiệm vụ, nhân viên phải làm gì?",
+        "options": [
+          "Kê khai tài sản mang theo người",
+          "Mang mặc trang bị bảo hộ đúng quy định",
+          "Có mặt đúng giờ theo quy định",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trong trường hợp kết số hành lý thiếu so với TTHK thì bạn phải làm gì? A",
+        "options": [
+          "Kiểm tra lại từng kiện trên tờ lưu hành lý",
+          "Cộng lại toàn bộ tờ lưu",
+          "Kiểm tra lại vị trí làm việc",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Điện văn MVT (Movement message) dùng đề làm gì?",
+        "options": [
+          "Dùng để thông báo thời gian cất hạ cánh và kèm theo một số thông tin về phân bố tải cũng như trọng lượng của chúng",
+          "Dùng để thông báo thời gian cất hạ cánh của chuyến bay",
+          "Dùng cung cấp một số thông tin về phân bố tải cũng như trọng lượng của chúng",
+          "Dùng để thông báo thời gian cất cánh và kèm theo một số thông tin về phân bố tải cũng như trọng lượng của chúng"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Điện LDM (Load distribution message) dùng để làm gì?",
+        "options": [
+          "Dùng để thông báo thời gian cất hạ cánh",
+          "Dùng để thông báo thời gian cất cánh",
+          "Dùng để thông báo cho các sân bay liên quan thông tin về phân bố tải cũng như trọng lượng của chúng",
+          "Dùng để thông báo cho các sân bay liên quan"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Trước khi trả hành lý vào băng chuyền bạn phải làm gì?",
+        "options": [
+          "Đối chiếu hành lý và điện văn phù hợp chuyến bay.mình được phân công phục vụ",
+          "Xi nhan cho lái xe tiếp cận cửa ULD vào vị trí trả phù hợp",
+          "Nhận bàn giao hành lý, ghi nhận thời gian giao nhận",
+          "Tất cả các công việc trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi trả hết hành lý trong thùng đựng hành lý thì phải làm gì tiếp theo?",
+        "options": [
+          "Trả hết thùng nào thì gạch số thùng đó trên điện văn",
+          "Kiểm tra kiện nhỏ trong khe thùng hoặc chỗ khó quan sát",
+          "Móc nối dolly cho nhân viên đầu kéo",
+          "Tất cả các công việc trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi trả hết hành lý vào băng chuyền thì phải làm gì 2",
+        "options": [
+          "Kiểm tra lại toàn bộ băng chuyền lần cuối",
+          "Báo cho nhân viên giám sát",
+          "Báo cho nhân viên PVHK",
+          "Báo cho ca trưởng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khi trả hành lý mà phát hiện hành lý rơi ra ngoài thì phải làm gì?",
+        "options": [
+          "Gom lại toàn bộ hành lý bị rơi ra",
+          "Báo cho nhân viên PVHK đến",
+          "Yêu cầu nhân viên PVHK đến lập biên bản và bàn giao cho nhân viên PVHK đến",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi chuẩn bị làm một chuyến bay đi thì bạn làm gì?",
+        "options": [
+          "Chuẩn bị thẻ cắm thùng",
+          "Chuẩn bị tờ lưu cuống thẻ",
+          "Chuẩn bị checklist chuyến bay đi",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi xé thẻ lưu thì bạn phải kiểm tra thẻ hành lý như thế nào là đúng quy định?",
+        "options": [
+          "Tay trái kéo dài thẻ, phù hợp với chuyến bay nhân viên PVHL đang phục vụ",
+          "Tay trái kéo dài thẻ, dùng ngón tay phải chỉ vào số hiệu chuyến bay, đường bay",
+          "Tay trái kéo dài thẻ, dùng ngón tay phải chỉ vào số hiệu chuyến bay, đường bay, phù hợp với chuyên bay PVHL đang phục vụ",
+          "Dùng ngón tay phải chỉ vào số hiệu Chuyến bay, đường bay, phù hợp với chuyến bay PVHL đang phục vụ"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Khi nhận thông tin kết sổ từ nhân viên thủ tục hành khách thì phải làm gì 2",
+        "options": [
+          "Tổng hợp toàn thẻ thùng",
+          "Cộng tổng số kiện AÈ",
+          "Cộng tổng số kiện, tổng hợp toàn bộ bingo",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Trước khi chất xếp hành lý lên ULD, nhân viên hành lý phải làm gì 2",
+        "options": [
+          "Kiểm tra mức độ ưu tiên của thẻ",
+          "Kiểm tra nhãn mác của thẻ",
+          "Kiểm tra mức độ ưu tiên của thẻ, kiểm tra nhãn mác của thẻ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nhận hành lý quá khổ thì phải làm gì?",
+        "options": [
+          "Kiểm soát số tổng số kiện hành lý",
+          "Kiểm tra tình trạng các kiện hành lý",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Tại băng chuyền hành lý chuyến bay đi có kiện hành lý không có thẻ thì sử lý như thế nào?",
+        "options": [
+          "Báo nhân viên an ninh trực đảo",
+          "Yêu cầu nhân viên thủ tục hành khách lập biên bản",
+          "Ghi chép vào biểu mẫu yêu cầu nhân viên phục vụ hành khách ký xác nhận",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi kết số mà thấy hành lý của bạn nhận ít hơn so với của nhân viên phục vụ hành khách thì phải làm gì?",
+        "options": [
+          "Kiểm tra đếm lại trên Bigo xem có dán chồng 2 cuống thẻ lên nhau",
+          "Cộng lại trên bingo, kiểm tra lại trên đảo hành lý",
+          "Kiểm tra hành lý quá khổ, kiểm tra với nhân viên PVHK",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi kết sỗ mà thấy hành lý của bạn nhận nhiều hơn so với của nhân viên thủ tục hành khách thì phải làm gì?",
+        "options": [
+          "Kiểm tra đếm lại trên Bigo xem có để trống ô không",
+          "Cộng lại trên bingo, kiểm tra hành lý lấy lại hoặc cho xuống nhưng chưa tháo thẻ lưu",
+          "Kiểm tra có lưu nhầm của chuyến bay khác, cộng lại lần cuối",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi gặp kiện hành lý chất xếp không tương thích thì phải làm thế nào?",
+        "options": [
+          "Tách các kiện hàng để tránh bị ảnh hưởng trong trường hợp bị rò rỉ",
+          "Các kiện bị rò rỉ không được chất lên mâm thùng",
+          "Nếu các kiện rò rỉ đã chất lên mâm thùng thì phải dỡ xuống",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi gặp sự cố tai nạn thì phải làm thế nào?",
+        "options": [
+          "Báo cáo các cấp theo quy định",
+          "Tường trình lại sự cố tai nạn",
+          "Có mặt tại đơn vị khi có yêu cầu của các cấp",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi trả hành lý băng chuyền đến phải làm gì?",
+        "options": [
+          "Kiểm tra vị trí trả hành lý",
+          "Chuẩn bị điện văn liên quan C",
+          "Có mặt tại vị trí đúng giờ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Bạn có mặt tại vị trí đảo hành lý đến trước bao nhiêu phút so với thời gian tàu bay hạ cánh?",
+        "options": [
+          "Ít nhất là 5 phút A NỔ",
+          "Ít nhất là 10 phút",
+          "Ít nhất là 15 phút",
+          "Ít nhất là 20 phút"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khi đã xé thẻ lưu và chất xếp lên ULD mà nhân viên PVHK báo cắt lại kiện hành lý đó thì bạn phải làm gì?",
+        "options": [
+          "Tìm lại kiện hành lý đó cho xuống khỏi ULD và tháo ngay thẻ lưu trên tờ lưu ra ngay khỏi bingo",
+          "Báo lại cho ca trưởng",
+          "Báo cho nhân viên giám sát",
+          "Tìm lại kiện hành lý và cho xuống khỏi ULD"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khi nhận được thông tin kết số của nhân viên PVHK thì bạn làm gì?",
+        "options": [
+          "Tổng hợp lại tờ lưu cuống thẻ và cộng lại",
+          "Báo cho nhân viên đầu kéo kéo hành lý ra tàu bay",
+          "Báo cho nhân viên giám sát",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay đến thì PVHL cần những loại điện gì?",
+        "options": [
+          "Điện LDM",
+          "Điện MVT",
+          "Điện CPM",
+          "Tất cả các loại điện văn trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trả thứ tự hành lý ưu tiên như thế nào là đúng?",
+        "options": [
+          "Trả hành lý theo thứ tự, VIPA, F,",
+          "J,BP,BC,BD,BT,B B. Trả hành lý theo thứ tự, BF, VIPA,BJ,BP,BC,BD,BT,B",
+          "Trả hành lý theo thứ tự, BF, VIPA,BJ,B,BC,BD,BT,B",
+          "Trả hành lý theo thứ tự, B, VIPA,BJ,B,BC,BD,BT,B"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Trước khi xé thẻ để lưu và tờ lưu cuống thẻ bạn phải làm gì?",
+        "options": [
+          "Kiểm tra số hiệu chuyến bay phù hợp với chuyến bay PVHL làm",
+          "Kiểm tra điểm đến phù hợp",
+          "Kiểm tra ngày bay",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Tại băng chuyền đi nếu bạn phát hiện kiện hành lý không có thẻ thì bạn phải làm gì?",
+        "options": [
+          "Báo cho nhân viên an ninh",
+          "Báo cho nhân viên TTHK",
+          "Cả A và B",
+          "Báo cho nhân viên giám sát"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Khi phát hiện kiện hành lý bất thường tại đảo hành lý đi thì bạn xử lý như thế nào?",
+        "options": [
+          "Báo nhân viên thủ tục hành khách chuyến bay đi",
+          "Báo nhân viên thủ tục hành lý đến",
+          "Báo nhân viên giám sát viên giám sát",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      }
+    ]
+  },
+  {
+    "name": "Bộ đề thi ALS – Chất xếp tàu bay (AIC)",
+    "note": "OCR từ PDF",
+    "questions": [
+      {
+        "q": "Bạn hãy cho biết chiều cao ngưỡng cửa hầm hàng sau của tàu bay A320?",
+        "options": [
+          "2,00m",
+          "211m",
+          "2.15m",
+          "2.20m"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Bạn hãy cho biết chiều cao ngưỡng cửa hầm hàng sau của tàu bay A330-300?",
+        "options": [
+          "3,00m",
+          "3,22m",
+          "20m",
+          "50m"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Bạn hãy cho biết chiều cao ngưỡng cửa hầm hàng trước của tàu bay A320?",
+        "options": [
+          "1,80 m",
+          "1,90m",
+          "2.03m",
+          "2.20m"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Bạn hãy cho biết chiều cao ngưỡng cửa hầm hàng trước của tàu bay A330-300?",
+        "options": [
+          "2,58m",
+          "3,00 m",
+          "3.20m",
+          "3.50 m"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Bạn hãy cho biết khoảng cách giữa vị trí cần đặt và chóp an toàn là bao nhiêu mét?",
+        "options": [
+          "Khoảng 0,8 m",
+          "Khoảng 1,0m",
+          "Khoảng 1,2m",
+          "Khoảng 1,5 m"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Bạn hãy cho biết những vị trí bắt buộc phải đặt chóp an toàn?",
+        "options": [
+          "Phía trước mỗi động cơ",
+          "Bên hông mỗi động cơ",
+          "Hai đầu cánh tàu bay",
+          "Đáp an A, B đúng, C sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "/ Bến ( 04) vị trí cần đặt chóp an toàn bỗổ sung khi tàu bay đỗ cạnh đường công vụ là các vị trí nào/",
+        "options": [
+          "Phía trước mỗi động cơ",
+          "Mũi và đuôi tàu bay",
+          "Hai đầu cánh tàu bay",
+          "Đáp án, B & C đúng, A sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Các bước chuẩn bị cho việc chất xép ULD vào hầm hàng A330 là gì?",
+        "options": [
+          "Mở cửa hầm hàng",
+          "Hạ các khoá ngạch cửa",
+          "Mở nắp bảng điều khiển hầm hàng và bật công tắc điện (ON)",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Các kiện hàng nặng bao nhiêu kg trở lên khi chất rời trong khoang hàng thì nên sử dụng dây chăng?",
+        "options": [
+          "70 kg",
+          "100 kg",
+          "120 kg",
+          "150 kg"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Chất xếp tối đa cho phép của Hằầm hàng sau (CPT3/CPT4/CPT8) - Máy bay A321 - Group H (có 01 ACT) là?",
+        "options": [
+          "1497kg",
+          "3567g",
+          "3500kg",
+          "3728kg"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Chất xếp tối đa cho phép của khoang hàng 5 máy bay A321 group G (không có ACT) là bao nhiêu?",
+        "options": [
+          "500kg",
+          "720kg",
+          "800kg",
+          "1497kg"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Có thể chèn cứng hành lý,hàng hóa vào vách hầm hàng và chất xếp quá vạch giới hạn chiêu cao trong hâm hàng?",
+        "options": [
+          "Đúng",
+          "Sai",
+          "Chỉ khi nhân viên HDCX yêu cầu"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Công dụng của khóa \"Center latch (YZ latch)\" là gì?",
+        "options": [
+          "Được lắp đặt tại khu vực cửa để di chuyển ULD theo hướng ngang (Y) và dọc (X)",
+          "Giúp di chuyển thùng AKE qua Trái hoặc Phải của Hầm hàng",
+          "Giữ thùng AKE theo hướng Y và Z; Khóa sẽ tự hạ xuống khi Mâm/ Thùng ALF đi qua nó",
+          "Giữ ULD theo hướng X và Z; Đảm bảo ULD không bị trôi"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Cửa hầm hàng trước của tàu A320 nằm ở phần khoang nào?",
+        "options": [
+          "11",
+          "12",
+          "13",
+          "21"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Cửa hầm hàng trước của tàu A321 nằm ở phần khoang nào?",
+        "options": [
+          "11",
+          "12",
+          "21",
+          "22"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Cửa hầm sau tàu bay A320 nằm ở phần khoang nào?",
+        "options": [
+          "11",
+          "12",
+          "41",
+          "42"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Đèn của bảng điều khiển cửa của tàu A320/321 ở trạng thái như thế nào là đảm bảo cửa đã được mở hêt?",
+        "options": [
+          "Ở trạng thái màu vàng",
+          "Ở trạng thái màu Xanh",
+          "Ở trạng thái màu đỏ"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Điện CPM (Container/Pallet message) trong ngành hàng không để làm gì?",
+        "options": [
+          "Thông báo vị trí, trọng lượng và số của các thùng mâm trong khoang hàng máy bay",
+          "Thời gian chuyến bay cất cánh",
+          "Thời gian bay còn lại",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Điện LDM (Load distribution message) trong ngành hàng không để làm gì?",
+        "options": [
+          "Dùng để thông báo cho các sân bay liên quan thông tin về phân bố tải cũng như trọng lượng của chúng",
+          "Thời gian cất cánh",
+          "Thời gian hạ cánh",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Điện MVT (Moverment message) trong ngành hàng không để làm gì?",
+        "options": [
+          "Điện văn thông báo thời gian đi và đến của một chuyến bay",
+          "Dùng để chỉ trọng lượng của chúng",
+          "Thời gian bay",
+          "Thông báo khách già yếu"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Hầm hàng A330-300 bao gồm bao nhiều khoang (CPT) và cụ thể là những khoang nào?",
+        "options": [
+          "2 khoang: Khoang trước và Khoang sau",
+          "3 khoang: Khoang trước, sau và khoang 5",
+          "4 khoang: Khoang 1, 2, 3, 4",
+          "5 khoang: Khoang 1, 2, 3, 4 và khoang 5"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hầm hàng tàu bay A320 gồm các phần khoang nào?",
+        "options": [
+          "Phần khoang 11,12,13",
+          "Phần khoang 31,32, 41, 42",
+          "Khoang hầm 5",
+          "Tất cả các đáp án trên A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hầm hàng tàu bay A321 gồm các phần khoang nào?",
+        "options": [
+          "Phần Khoang 11,12, 21, 22, 23",
+          "Phần Khoang 31,32, 33, 41, 42",
+          "Khoang hầm 5",
+          "Tất cả các đáp án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hằm trước A330-300 có thể chất được tối đa bao nhiêu MÂM PMC và vị trí nào?",
+        "options": [
+          "6 PMC: 11P,12P,21P,22P,23P,24P",
+          "9 PMC: 11,12,13,21,22,23,24,25,26 6.68 PMG: 11P,12P,15P,/21P.22P,23P D. 4 PMC: 31P,32P,41P,42P"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Hàng hoá như thế nào sẽ không được chất xếp lên máy bay?",
+        "options": [
+          "Không được đóng gói một cách hợp lý",
+          "Có thể là nguyên nhân gây hư hại máy bay hoặc các hàng hoá khác",
+          "Làm hỏng, bân máy bay hay các hàng hoá khác",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Loại hành lý nào phải được bốc dỡ trước và bảo quản tốt để chuyển vào băng chuyền hành lý trước các hành lý thông thường?",
+        "options": [
+          "Hành lý có dán nhãn Priority phục vụ khách VIỊP, CIP, Skyboss :",
+          "Hành lý Rush Bag (Chuyển trả nhanh)",
+          "Không quy định loại cần ưu tiên trả trước",
+          "Đáp an A, B đúng, C sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay chất rời thì cần các loại điện văn nào?",
+        "options": [
+          "2 loại : MVT và LDM",
+          "3 loại : MVT và UCM",
+          "1 loại : CPM",
+          "1 loại : UCM"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khi bạn phục vụ chuyến bay sử dụng ULD thì bạn cần những loại điện văn?",
+        "options": [
+          "Điện văn CPM",
+          "Điện văn MVT & CPM",
+          "Điện văn MVT & UCM",
+          "Điện văn MVT & UCM & LDM"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi chất xếp hàng hóa, hành lý lên hầm hàng thì cần phải lưu ý những điều gì?",
+        "options": [
+          "Không được chất xếp hàng hóa hành lý quá vạch MAX mầu đên trên tàu bay",
+          "Chát xếp đầy hầm hàng",
+          "Chát xếp hàng theo đúng chiều mũi tên",
+          "Đáp an A, C đúng,B sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi chất xép kết hợp PAG và PMC ở toàn bộ hầm hàng SAU A330-300, phải có tối thiểu bao nhiêu mâm PAG2",
+        "options": [
+          "1PAG",
+          "2PAG",
+          "3 PAG",
+          "4PAG"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khi có hành lý rơi ra sàn tàu bay thì bạn phải làm gì?",
+        "options": [
+          "Báo cho nhân viên đầu kéo",
+          "Báo cho nhân viên giám sát “h⁄",
+          "Báo cho Tiếp viên Trưởng",
+          "Báo cho nhân viên Thông thoại"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khi đóng cửa hầm hàng xong bạn phải làm gì?",
+        "options": [
+          "Đóng cửa bình thường",
+          "Báo cho nhân viên giám sát",
+          "Báo cho nhân viên Thông thoại",
+          "Kiểm tra lại toàn bộ cửa hầm hàng, bằng cách dùng ngón tay chỏ chỉ 4 góc của cửa từ trái qua phải"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi không thể tuân thủ đúng theo Bảng hướng dẫn chất xếp (L.I.R), nhân viên chất xếp phải làm gì?",
+        "options": [
+          "Dừng chất xếp",
+          "Đảm bảo chất xếp hết hàng hóa và hành lý rồi báo lại sau cho kịp giờ",
+          "Tham khảo ý kiến của nhân viên cân bằng tải để thay đổi chất xếp cho phù hợp",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Khi nào được đóng chèn bánh mũi tàu bay đến?",
+        "options": [
+          "Khi tàu đã vào vị trí dừng hẳn",
+          "Động cơ chính đã tắt",
+          "Đèn chống va chạm đã tắt, và có tín hiệu của thợ máy",
+          "Tất cả các đáp án trên A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nào được đóng chèn bánh sau (càng chính) tàu bay đến?",
+        "options": [
+          "Khi tàu đã vào vị trí dừng hẳn",
+          "Động cơ chính đã tắt",
+          "Đèn chống va chạm đã tắt và có tín hiệu của thợ máy và đã đóng chèn bánh mũi",
+          "Tất cả các đáp án trên A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi nào được phép đặt chóp an toàn?",
+        "options": [
+          "Khi đã đóng chèn xong",
+          "Khi trang thiết bị đã tiếp cận",
+          "Khi tàu bay vào vị trí dừng hẳn",
+          "Khi tàu đã tắt đèn chống va chạm"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khi nào được phép thu chèn bánh tàu bay?",
+        "options": [
+          "Khi các trang thiết bị đã rút hết",
+          "Khi có tín hiệu của nhân viên thợ máy",
+          "Khi giám sát yêu cầu",
+          "Tất cả các đáp án trên A,B,C đúng"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khi nào được phép thu chóp an toàn?",
+        "options": [
+          "Khi đã đóng các cửa hầm hàng",
+          "Khi tất cả các trang thiết bị đã rút khỏi tàu bay",
+          "Khi tàu bay bắt đầu lăn",
+          "Khi tàu đã bật đèn chống va chạm"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Bạn cần phải chú ý gì công tác an toàn trong quá trình phục vụ?",
+        "options": [
+          "Phải tránh xa các khu vực nguy hiểm như khu vực trước và sau động cơ, khu vực hút/xả khí của hệ thống lạnh",
+          "Không được di chuyển lên xuống khi băng tải của xe băng chuyền đang hoạt động",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Nhân viên thực hiện như thế nào là đúng quy định?",
+        "options": [
+          "Các kiện hàng có gắn thẻ phục vụ đặc biệt như hàng dễ vỡ, hàng tươi sống, hàng có gắn thẻ định hướng... phải tuân thủ việc chât xêp đúng theo quy định và hướng dân của nhân viên HDCX",
+          "Không chèn cứng hành lý và hàng hóa vào vách hầm hàng và không chất xép hành lý hoặc hàng hóa quá vạch giới hạn chiều cao trong hầm hàng",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Mục đích sử dụng các thanh dàn lực để làm gì?",
+        "options": [
+          "Để giúp cố định kiện hàng nặng khi bay",
+          "Để tận dụng thể tích chất xếp còn lại trong phạm vi thanh dàn lực",
+          "Để chất xếp thêm các kiện hàng khác trong phạm vi thanh dàn lực",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi tàu bay đang được tra nạp nhiên liệu thì bạn không được thực hiện những hành vi nào sau đây?",
+        "options": [
+          "Không được hút thuốc trong vùng tra nạp nhiên liệu",
+          "Không được sử đụng điện thoại di động",
+          "Không được vào vùng tra nạp nhiên liệu khi không có nhiệm vụ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khi xảy ra hoặc thấy ULD hỏng nhân viên cần làm gì?",
+        "options": [
+          "Không được sử dụng ULD hỏng",
+          "Phải rút khỏi hoạt động khai thác ngay lập tức",
+          "ULD phải được gắn thẻ hỏng",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Chát xếp tối đa của khoang hàng 1 tàu A320?",
+        "options": [
+          "3.412 Kg",
+          "3.402 Kg",
+          "3.452 Kg",
+          "3.456 Kg"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Khoảng cách giữa chèn và bánh tàu bay như thế nào là đúng?",
+        "options": [
+          "Khoảng 1 cm",
+          "Khoảng 1,5 - 2,0 cm",
+          "Khoảng 2,0 cm",
+          "Khoảng 5,0 cm"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Kích thước cửa của tàu A320/ 321 là bao nhiêu mét?",
+        "options": [
+          "1,82 x 1,23m",
+          "1,88 x 1,23m",
+          "1,90 x 1,23m",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Kích thước cửa hầm hàng sau tàu bay A 330-300 là bao nhiêu mét?",
+        "options": [
+          "1,68 x 2,78m",
+          "1,68 x 2,73m",
+          "1,68 x 2,80 m",
+          "1,68 x 3,73m"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Kích thước cửa hầm hàng trước tàu bay A 330-300 là bao nhiêu mét?",
+        "options": [
+          "1,07x2,70m",
+          "1,07 x 2,90 m",
+          "1,82 x 3.00 m D",
+          "1,82 x 3,05m"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Luôn phải rất cần thận khi mở hay đóng của hầm hàng, Ai là người được phép đóng mở cửa hầm hàng?",
+        "options": [
+          "Tất cả nhân viên sân đỗ",
+          "Nhân viên hướng dẫn chất xép",
+          "Nhân viên sân đỗ đã được qua đào tạo và cấp chứng chỉ",
+          "Tất cả đều đúng"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Máy bay A320 của Vietjet có bao nhiêu phần khoang(section)?",
+        "options": [
+          "FWD:11/12/13/21/22;AFT:31/32/33/41/42/5",
+          "FWD:11/12/21/22/23;AFT:31/32/33/41/42/5",
+          "FWD 11/12/13;AFT:31/32/33/41/5",
+          "FWD:11/12/13;AFT:31/32/41/42/5"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Máy bay A321 có số đăng ký là VN-A651 (GroupF) của VietJet có bao nhiêu A.C.T và nằm ở vị trí nào của hâm hàng máy bay?",
+        "options": [
+          "01 ACT; vị trí: 23",
+          "01 ACT; vị trí: 31",
+          "02 ACT; vị trí: 31, 32",
+          "02 ACT; vị trí: 23, 31"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Máy bay A321 của Vietjet có bao nhiêu phần khoang (section)?",
+        "options": [
+          "FWD: 11/12/13; AFT: 31/32/41/42/5",
+          "FWD: 11/12/21/22/23;AFT: 31/32/33/41/42/5",
+          "FWD: 11/12/13;AFT:31/32/33/41/5",
+          "FWD: 11/12/13;AFT: 31/32/41/42/5"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Nếu tốc độ gió lớn hơn bao nhiêu hải lý thì không được mở cửa hầm hàng?",
+        "options": [
+          "Lớn hơn 40 hải lý",
+          "Lớn hơn 65 hải lý",
+          "Lớn hơn 75 hải lý",
+          "Lớn hơn 96 hải lý"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Nguyên tắc chất xếp hầm hàng rời như thế nào là đúng?",
+        "options": [
+          "Chát xếp lần lượt khoang hàng 2,1,3,5,4",
+          "Chát khoang hàng 1 trước",
+          "Chát xếp khoang hàng 4 trước",
+          "Chát xếp khoang hàng 5 trước"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Nhân viên bốc xếp tại tàu bay phải có mặt tại vị trí phục vụ trước bao nhiêu phút trước khi tàu bay đáp?",
+        "options": [
+          "05 phút",
+          "10 phút",
+          "12 phút",
+          "15 phút"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Nhân viên cảnh giới cánh tàu bay cần bao nhiêu gậy cảnh giới an toàn (gậy phản quang)?",
+        "options": [
+          "01",
+          "02",
+          "03",
+          "04"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên cảnh giới cánh tàu bay khi làm việc ban đêm hay thời tiết xấu thì phải làm gi?",
+        "options": [
+          "Luôn bật sáng đèn gậy cảnh giới an toàn",
+          "Thực hiện cảnh giới bình thường",
+          "Có mặt tại vị trí phục vụ 10 phút trước khi tàu bay đáp",
+          "Đáp an A, C đúng, B sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên được phân công nhiệm vụ phải KIÊM TRA gì trước khi phục vụ chuyến bay?",
+        "options": [
+          "Dụng cụ bảo hộ lao động theo quy định",
+          "Kiểm tra chất lượng và số lượng của chèn bánh máy bay",
+          "Kiểm tra đủ số lượng trụ an toàn phù hợp",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên thực hiện việc bốc xếp hành lý/ hàng hóa cho chuyến bay đi cần lưu ý gì?",
+        "options": [
+          "Chắt xếp đúng tàu bay khai thác, đúng chuyến bay khai thác, đúng vị trí hầm hàng",
+          "Đảm bảo khoảng cách tối thiểu giữa trần hầm hàng trong tàu bay và kiện hàng cao nhất như quy định (2 inch)",
+          "Báo cáo nhanh các trường hợp có khả năng là rủi ro khai thác",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Quá trình chất hàng lên máy bay, nguyên tắc nào cần được tuân theo?",
+        "options": [
+          "Phân chia tải thành những phần đều nhau, Xếp những hàng nặng xuống dưới cùng",
+          "Sắp xếp ngăn nắp để đảm bảo ổn định nhất và tận dụng tối đa thể tích sẵn có. “2#",
+          "Không được xếp quá các giới hạn của sàn máy bay, khi cần thiết nên dùng tắm dàn lực",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Quy trình báo cáo sự cố tai nạn bắt thường như thế nào?",
+        "options": [
+          "Nhân viên báo nhóm trưởng",
+          "Nhóm trưởng báo ca trưởng",
+          "Báo nhân viên giám sát viên giám sát",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Sau khi dỡ hết hành lý trên hầm hàng thì bạn phải làm gì?",
+        "options": [
+          "Báo cho nhân viên giám sát",
+          "Báo cho nhân viên lái xe băng chuyền",
+          "Báo cho nhân viên lái xe băng chuyền",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Tải hàng (Deadload) trong khoang chất xếp phải được chằng buộc kỹ lưỡng hoặc chất đầy để tránh những dịch chuyên. Khoang hàng chất được bao nhiêu phần thể tích thì được xem là chất đầy 2?",
+        "options": [
+          "40%",
+          "50%",
+          "70%",
+          "80%"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Theo quy định độ cao ngưỡng cửa hầm hàng từ bao nhiêu mét trở xuống thì không phải dùng thang kỹ thuật để mở cửa hầm hàng?",
+        "options": [
+          "233m",
+          "2,40m c",
+          "245m",
+          "2.50m"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Theo quy định thì những đối tượng nào được phép đóng mở cửa hầm hàng?",
+        "options": [
+          "Chỉ những nhân viên đã được cấp chứng chỉ",
+          "Cứ báo thợ máy là được",
+          "Chỉ những nhân viên đã được đào tạo",
+          "Đáp án A, C đúng, B sai",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Thứ tự thao tác MỞ cửa hầm hàng rời (Khoang 5)?",
+        "options": [
+          "Đầy cửa lên cho đến khi móc được cài vào nhau",
+          "Xoay tay cầm sang vị trí \"Open\" và đẩy cửa vào trong",
+          "Xoay tay cầm về vị trí \"Lock\" và đầy vào trong rãnh",
+          "Án vào nút \"Push\" ở trên tay cầm để tay cầm bật ra khỏi rãnh"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Trước khi bạn muốn mở cửa hầm hàng thì bạn phải làm gì?",
+        "options": [
+          "Dùng ngón tay chỉ lên cửa hầm hàng từ trái qua phải, từ trên xuống dưới",
+          "Mắt nhìn theo tay",
+          "Đảm bảo phía trước không có chướng ngại vật",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi bắt đầu tiến hành chất hàng lên máy bay cần lưu ý gì?",
+        "options": [
+          "Sàn, tường, và vách ngăn của máy bay ở trạng thái điều kiện tốt",
+          "Đảm bảo các lưới ngăn cách dùng để chia nhỏ hầm hàng, khoang hàng được lắp chắc chắn, đúng vị trí",
+          "Lối tiếp cận bảng điều khiển và cửa sập của sàn cabin không bị cản trở",
+          "Tất cả đều đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi chất xếp hàng hóa tươi sống lên hầm hàng thì bạn phải làm gì?",
+        "options": [
+          "Lót tầm Nilon hình phễu trên hầm hàng",
+          "Lót tầm giấy lên trên tầm Nilon",
+          "Chát xếp hàng theo đúng chiều mũi tên",
+          "Tất cả các phương án trên ANÈ;"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi chất xép hành lý, hàng hóa lên tàu bay bạn cần phải làm gì?",
+        "options": [
+          "Nhận thông tin và tờ loading từ nhân viên giám sát chuyến bay và hội ý chuyến bay với nhân viên giám sát chuyên bay",
+          "Nhận tờ lưu từ nhân viên giám sát chuyến bay và hội ý chất xếp",
+          "Chờ thông tin từ nhân viên TTHK",
+          "Chờ thông tin của nhân viên đầu kéo"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Trước khi đóng cửa hầm hàng thì bạn phải làm gì?",
+        "options": [
+          "Kiểm tra chướng ngại vật tại cửa hầm hàng",
+          "Kiểm tra khóa chốt, lưới cửa hầm hàng",
+          "Kiểm tra mép cửa hầm hàng",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi nhận nhiệm vụ, nhân viên bốc xếp phải làm gì?",
+        "options": [
+          "Không mang các đồ vật cắm ra tàu bay",
+          "Có mặt đúng giò theo quy định",
+          "Có mặt đúng giờ theo quy định",
+          "Các đáp án A,B,C đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi rút khỏi hầm hàng thì bạn phải làm gì?",
+        "options": [
+          "Cài lưới đóng chốt an toàn",
+          "Tắt điện trên hầm hàng",
+          "Xi nhan cho trang thiết bị rời khỏi vị trí hầm hàng",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Với tốc độ gió lớn hơn bao nhiêu hải lý thì không được cửa hầm hàng mở?",
+        "options": [
+          "Lớn hơn 40 hải lý",
+          "Lớn hơn 65 hải lý",
+          "Lớn hơn 75 hải lý",
+          "Lớn hơn 96 hải lý"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Đễ đảm bảo giới hạn hầm hàng nhiều trường hợp sử dụng thanh dàn lực để làm gì?",
+        "options": [
+          "Giúp cố định kiện hàng nặng khi bay",
+          "Tận dụng thể tích chất xếp còn lại trong phạm vi thanh dàn lực",
+          "Chát xếp các kiện hàng khác trong phạm vi thanh dàn lực",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nếu máy bay có 1 thùng dầu phụ, hãy cho biết vị trí của thùng dầu phụ trên tàu A321?",
+        "options": [
+          "Vi trí 21",
+          "Vị trí 22",
+          "Vị trí 31",
+          "VỊ trí 32"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Khoang hàng 1 của tàu A320 có bao nhiêu phân khoang?",
+        "options": [
+          "11, 12, 13",
+          "TT1., 13, 1⁄4 GvT1, 12, 12, 14 _9)Ö SIM 2"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Chát xếp tối đa khoang hàng 4 của tàu A320?",
+        "options": [
+          "3402 kg",
+          "2426 kg",
+          "2110 kg",
+          "1497 kg"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Khoang hàng 3 của tàu A320 có bao nhiêu phân khoang?",
+        "options": [
+          "31, 32, 33",
+          "31, 32",
+          "31, 32, 41,42 /M",
+          "41,42, 51"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Chát xếp tối đa khoang hàng 5 của tàu A320? :",
+        "options": [
+          "3402 kg",
+          "2426 kg",
+          "2110 kg",
+          "1497 kg"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Khoang hàng 2 của tàu A321 có bao nhiêu phân khoang?",
+        "options": [
+          "21,22,23",
+          "21,22, 23, 24",
+          "21,22",
+          "21,22, 31"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Khoang hàng 4 của tàu A321 có bao nhiêu phân khoang?",
+        "options": [
+          "41L, 41R, 42L, 42R, 43L, 43R",
+          "41,42, 43",
+          "41,42",
+          "41P, 42P, 43P"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Chát xếp tối đa khoang hàng 5 của tàu A330?",
+        "options": [
+          "3402 kg",
+          "2426 kg",
+          "3468 kg",
+          "1497 kg"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Hầm trước của tàu A330 chất xếp tối đa được bao nhieu AKE",
+        "options": [
+          "16 AKE",
+          "14 AKE",
+          "15 AKE",
+          "18 AKE"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hằầm trước của tàu A330 chất xếp tối đa được bao nhiêu PMC - 96 X125",
+        "options": [
+          "6PMC",
+          "5PMC",
+          "4PMC",
+          "7PMC"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Hầm trước của tàu A330 chất xếp tối đa được bao nhiêu PAG - 88x125 2?",
+        "options": [
+          "5PAG",
+          "7PAG",
+          "6PAC",
+          "5PAG"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Hằầm sau của tàu A330 chất xếp tối đa được bao nhiêu AKE ?",
+        "options": [
+          "12 AKE",
+          "14 AKE",
+          "16 AKE",
+          "10 AKE"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Hằm sau của tàu A330 chát tối đa được bao nhiêu mâm PMC 96X125",
+        "options": [
+          "6PMC",
+          "5PMC",
+          "4PMC",
+          "7PMC"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Hầm sau của tàu A330 chát tối đa được bao nhiêu mâm PAG 88X125",
+        "options": [
+          "5PAG",
+          "7PAG",
+          "6PAC /wÈ",
+          "5PAG"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Tàu ERJ-190 Vietjet đang khai thác có hai khoang hàng đều được trang bị hệ thống điều áp và được xếp loại là khoang hàng loại?",
+        "options": [
+          "Khoang loại A",
+          "Khoang loại B",
+          "Khoang loại C",
+          "Khoang loại D"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Theo tài liệu khai thác mặt đất, Tàu ERJ-190 Vietjet có hệ thống thông gió tại hầm?",
+        "options": [
+          "Khoang hầm trước",
+          "Khoang hầm sau",
+          "Cả câu A và câu B đều đúng",
+          "Cả câu A và câu B đều sai"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Tất cả tàu ERJ-190 Vietjet đều được trang bị hệ thống thiết bị giải trí (In-flight Entertainment System)?",
+        "options": [
+          "Đúng",
+          "Sai",
+          "Tùy từng tàu bay khác nhau"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Có được chất hành lí, hàng hóa kề sát, xung quanh vòi phun chữa cháy được lắp trên trần hầm hàng không?",
+        "options": [
+          "Được",
+          "Không",
+          "Tùy lượng hàng hóa hành lí nhiều hay không",
+          "Không câu nào ở trên đúng"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Có được chất hành lí, hàng hóa vượt quá vạch giới hạn trong hầm hàng (2-inches line) với mục đích đề đi nhiều hành lí, hàng hóa hơn không?",
+        "options": [
+          "Không",
+          "Có"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "V.J không chấp nhận hàng nguy hiểm chở trên tàu bay ERJ190 ngoại trừ:",
+        "options": [
+          "Spare part từ Kỹ Thuật (mục đích bảo trì, bảo dưỡng hoặc sửa chữa)",
+          "Pin lithium của xe lăn điện đã được tháo rời và đóng gói theo quy định",
+          "Hàng nguy hiểm là chất lỏng",
+          "Không câu nào ở trên đúng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Cửa hầm hàng phía sau và phía trước của ERJ190 được mở đầy vào bên trong hầm hàng?",
+        "options": [
+          "Sai",
+          "Đúng"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Cửa hầm hàng chỉ được mở khi?",
+        "options": [
+          "Sau khi động cơ đã tắt",
+          "Sau khi đèn cảnh báo đã tắt",
+          "Nhân viên thông thoại tàu bay xác nhận an toàn tiếp cận mở cửa",
+          "Tất cả các ý trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Không chất các kiện hàng nặng lên bên trên các kiện hàng khác để tránh làm hư hỏng kiện hàng bên dưới?",
+        "options": [
+          "Đúng",
+          "Sai"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Trước khi đóng cửa hầm hàng, cần phải chắc chắn rằng?",
+        "options": [
+          "Tất cả các đèn hầm hàng đã được tắt",
+          "Kiểm tra cửa và khung viền cửa không bị hư hỏng",
+          "Tất cả các lưới cửa đã được cài đúng quy định",
+          "Cả A B và C đều đúng"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trong 3 chữ cái đầu của ULD, chữ cái thứ nhất là \"P\" chỉ loại ULD nào?",
+        "options": [
+          "Thùng chuẩn",
+          "Thùng không chuẩn",
+          "Mâm chuẩn",
+          "Tất cả đều đúng"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "103: Khi chất xếp hàng hóa nguy hiểm cần phải chú ý điều gì?",
+        "options": [
+          "Tất cả các kiện hàng nguy hiểm phải được xếp thẳng đứng theo chỉ dẫn",
+          "Nhãn hàng nguy hiểm ở vị trí dễ nhậntháy",
+          "Phải được chốt giữ để ngăn chặn bất cứ xê dịch nào cũng như tránh được việc va chạm gây hư hại với các hàng khác",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Hàng hóa, hành lý như thế nào thì được gọi là hàng ướt?",
+        "options": [
+          "Hàng hoá là chất lỏng chở trong thùng kín nước;",
+          "Hàng thuộc loại ướt nhưng không đóng vào thùng kín nước, ví dụ: cá, tôm, cua đông lạnh, thịt đông hoặc thịt tươi, da chưa thuộc, ...;",
+          "Hàng có thể sinh ra ra nước, ví dụ như động vật sống",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Cách thức phục vụ hàng ướt như thế nào là đúng?",
+        "options": [
+          "Phải được bảo vệ bằng các polyethylen hoặc vải dầu để giữ lại mọi rò rỉ hay tràn đỗ",
+          "Các thùng chứa hàng hoá ướt phải được chất xếp và cố định theo phương thẳng đứng",
+          "Hàng hoá ướt nếu xếp chồng nhiều lớp phải có sự quan tâm đặc biệt để tránh đè nát các thùng chứa ở dưới thâp",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên thực hiện như thế nào là đúng quy định?",
+        "options": [
+          "Trong quá trình chất xếp, nhân viên bốc xếp phải kiểm tra tem an ninh, nhãn hàng hóa.. nhăm đảm bảo hành lý/hàng hóa được chất lên đúng chuyến bay đang phục vụ và các yêu cầu như đê cập bên trên",
+          "Nhân viên chất xếp tuân thủ nguyên tắc kiện nặng chất trước, kiện nhẹ chất sau và chất từ trong ra ngoài, hành lý khách VỊP, CIP, SKYBOSS, Rush Bag, hành lý nôi chuyên và hành lý ưu tiên được chât sau cùng",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Loại mâm có kích thước đáy 88 x 125 là loại mâm gì?",
+        "options": [
+          "Mâm PMC",
+          "Mâm PAG",
+          "Mâm PKG"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Loại mâm có kích thước đáy 96 x 125 là loại mâm gì?",
+        "options": [
+          "Mâm PMC",
+          "Mâm PAG",
+          "Mâm PKG"
+        ],
+        "answer": 0
+      },
+      {
+        "q": "Trước khi cảnh giới cho tàu bay vào vị trí thì nhân viên phải làm gì?",
+        "options": [
+          "Gậy cây(không có đèn): Màu cam phép được dùng dưới ánh sáng ban ngày",
+          "Gậy có đèn: Được dùng chủ yếu ban đêm hay khi tầm nhìn thấp, tuy nhiên vẫn có thể vào ban ngày",
+          "Kiểm tra gậy có đèn nhầm đảm bảo tình trạng hoạt động tốt",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Trước khi cảnh giới cho tàu bay vào vị trí thì nhân viên phải làm gì?",
+        "options": [
+          "Kiểm tra FOD trong vòng 7,5m",
+          "Vị trí đỗ, lối di chuyển đầu cánh tàu bay di chuyển thông thoáng không có chướng ngài vật cản trở",
+          "Không cho phép phương tiện, thiết bị vào khu vực giới hạn an toàn 7,5m",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên di chuyển Wing Walker như thế nào là đúng?",
+        "options": [
+          "2 nhân viên Wing Walker đi dọc theo vạch giới hạn an toàn khu vực an toàn bãi đỗ tàu bay (7,5m), trông coi và đảm báo chắc chăn răng đường đi chuyền của tàu bay được thông thoáng không có chướng ngại vật cản trở",
+          "Nhân viên Wing Walker phải đứng ngoài vạch giới hạn ngay góc với đường công vụ để kiểm soát phương tiện di chuyển và ra tín hiệu cho phép máy bay vào vị trí đậu",
+          "Nhân viên Wing Walker phải di chuyển dọc theo vạch giới hạn an toàn, cách vạch 1m và nhìn trông coi đảm bảo thông thoáng không có chướng ngại vật đên khi tàu bay đừng lại tại vạch đô",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Nhân viên di chuyển Wing Walker như thế nào là đúng?",
+        "options": [
+          "2 nhân viên Wing-Walker đi dọc theo vạch giới hạn an toàn, cách vạch 1m đảm bảo chắc chắn đường di chuyển của tàu bay thông thoáng, không có chướng ngại vật và ra tín hiệu cho phép đẩy tàu bay ra vị trí khởi hành",
+          "Khi xe kéo đẩy tàu bay bắt đầu khởi hành, nhìn và trông coi đầu cánh (wingtips) đảm bảo thông thoáng không có chướng ngại vật cho đến khi máy bay được đây ra khỏi bãi đỗ",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Bạn phải chú ý điều gì trước khi đóng cửa hầm hàng?",
+        "options": [
+          "Hệ thống khóa hầm hàng và lưới bảo vệ được dựng lên đúng vị trí",
+          "Đèn khoang hàng hóa phải được tắt trừ khi cần thiết cho việc vận chuyển động vật sống trong hầm hàng",
+          "Khu vực xung quanh cửa bao gồm các bệ cửa và khung cửa không được dính sỏi, nước, nước đá và các chât lạ khác hoặc có chướng ngại vật",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 3
+      },
+      {
+        "q": "Bạn phải chú ý điều gì trước khi đóng cửa hầm hàng?",
+        "options": [
+          "Không được cố gắng mở lại cửa hầm hàng trừ khi khi nhận được tín hiệu cho phép từ tổ bay",
+          "Bát kể là bên nào yêu cầu mở lại cửa, sau khi tổ bay ra tín hiệu cho phép mở lại cửa hầm hàng, hãy làm theo các bước quy định tại mục: “Mở cửa hầm hàng”",
+          "Tất cả các phương án trên"
+        ],
+        "answer": 2
+      },
+      {
+        "q": "Dựa vào thông tin điện văn sau, hãy cho biết vị trí chất xếp hành lý trên hầm hàng tàu bay: LDM VJ3901/30.VN-A684.Y230.2/5 -SGN.88/00/00.T1075.1/0.2/0.3/643.4/432.5/0 .PAX/0/88. PAD/0/0 SI B 71/865 C12/210 MO COMO0 LDD DIST -1/N -2/N -3/SGN/210/C/433/B -4/SGN/432/B -5/N SI:",
+        "options": [
+          "Khoang hàng 1 & 2",
+          "Khoang hàng 3 & 4",
+          "Khoang hàng 1 & 5",
+          "Khoang hàng 4 & 5"
+        ],
+        "answer": 1
+      },
+      {
+        "q": "Dựa vào thông tin điện văn sau, hãy cho biết vị trí chất xếp hàng hóa trên hầm hàng tàu bay: LDM VJ938/30.VN-A530.Y240.2/5 -KIX.205/15/0.T4568.1/783.2/1400.3/1300.4/700.5/385 .PAX/220.PAD/0 SI B176/2385 C149/2183 M0 COM0 E0 LD DIST -H1/KIX/783/C -H2/KIX/1400/C -H3/KIX/1300/B -H4/KIX/700/B -H5/KIX/385/B SI 09 PRIORITY BAG LDD H4",
+        "options": [
+          "Khoang hàng 1 & 2 /w",
+          "Khoang hàng 3 & 4",
+          "Khoang hàng 1 & 5",
+          "Khoang hàng 4 & 5"
+        ],
+        "answer": 0
+      }
+    ]
+  }
+];
+
+/* ===== Moodle parser (port of builder) ===== */
+function parseMoodle(text){
+  const lines = text.split(/\r?\n/);
+  const n = lines.length;
+  const out = [];
+  const optRe = /^([a-eA-E])\.\s*(.*)$/;
+  const isMeta = s => {
+    s = s.trim();
+    return s==="" || /^Question\s+\d+\s*$/.test(s) ||
+      ["Incorrect","Correct","Partially correct","Not answered","Flag question","Select one:","Select one or more:"].includes(s) ||
+      s.startsWith("Mark ") || s.startsWith("Marked out of") || s.startsWith("Not flagged");
+  };
+  const unesc = s => { const d=document.createElement("textarea"); d.innerHTML=s; return d.value; };
+  const norm = t => t.trim().toLowerCase().replace(/\s+/g," ");
+  let i=0;
+  while(i<n){
+    if(/^Question\s+\d+\s*$/.test(lines[i].trim())){
+      let j=i+1, stem=null;
+      while(j<n && !/^Question\s+\d+\s*$/.test(lines[j].trim())){
+        const s=lines[j].trim();
+        if(s==="Select one:"||s==="Select one or more:")break;
+        if(!isMeta(s) && stem===null && s){ stem=s; j++; break; }
+        j++;
+      }
+      const options=[]; let correctRaw=null;
+      while(j<n && !/^Question\s+\d+\s*$/.test(lines[j].trim())){
+        const s=lines[j].trim();
+        if(s.startsWith("The correct answer is:")){correctRaw=s.slice("The correct answer is:".length).trim();j++;break;}
+        if(s.startsWith("The correct answers are:")){correctRaw=s.slice("The correct answers are:".length).trim();j++;break;}
+        const m=optRe.exec(s);
+        if(m && s!=="Select one:") options.push(unesc(m[2].trim()));
+        j++;
+      }
+      if(stem && options.length){
+        const stemClean = unesc(stem).replace(/^\d+\.\s*/,"").trim();
+        let ans=null;
+        if(correctRaw!==null){
+          const c=unesc(correctRaw).trim();
+          for(let k=0;k<options.length;k++){ if(norm(options[k])===norm(c)){ans=k;break;} }
+          if(ans===null){ for(let k=0;k<options.length;k++){ if(norm(options[k]).includes(norm(c))||norm(c).includes(norm(options[k]))){ans=k;break;} } }
+        }
+        out.push({q:stemClean, options, answer:ans});
+      }
+      i=j;
+    } else i++;
+  }
+  return out;
+}
+
+/* ===== Storage ===== */
+const LS_KEY="vjaa_quiz_subjects_v1";
+function loadCustom(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||"[]"); }catch(e){ return []; } }
+function saveCustom(arr){ try{ localStorage.setItem(LS_KEY, JSON.stringify(arr)); return true; }catch(e){ flash("Không lưu được (bộ nhớ trình duyệt)"); return false; } }
+function allSubjects(){ return [...BUILTIN_SUBJECTS.map(s=>({...s,builtin:true})), ...loadCustom().map(s=>({...s,builtin:false}))]; }
+
+/* ===== State ===== */
+let S = { subject:null, qlist:[], answers:[], order:[], idx:0, pass:80, timeLimit:0, tLeft:0, timer:null, startTs:0 };
+
+/* ===== Navigation ===== */
+const screens=["home","config","quiz","result","review","import"];
+function show(name){ screens.forEach(s=>document.getElementById("screen-"+s).classList.toggle("hidden", s!==name)); window.scrollTo({top:0,behavior:"smooth"}); }
+function goHome(){ stopTimer(); renderHome(); show("home"); }
+function showImport(){ renderManage(); switchTab("paste"); show("import"); }
+
+/* ===== Home ===== */
+function renderHome(){
+  const grid=document.getElementById("subject-grid");
+  const subs=allSubjects();
+  grid.innerHTML="";
+  subs.forEach((s,i)=>{
+    const el=document.createElement("div");
+    el.className="card subj";
+    el.innerHTML=`
+      <span class="badge ${s.builtin?'badge-builtin':'badge-custom'}">${s.builtin?'Có sẵn':'Đã thêm'}</span>
+      <div class="ico">✈</div>
+      <div class="name">${esc(s.name)}</div>
+      <div class="meta">${s.questions.length} câu hỏi${s.note?' • '+esc(s.note):''}</div>
+      <div class="row">
+        <button class="btn btn-primary" onclick="openConfig('${s.builtin?'b':'c'}',${s.builtin?i:i-BUILTIN_SUBJECTS.length})">Vào kiểm tra</button>
+      </div>`;
+    grid.appendChild(el);
+  });
+}
+
+/* ===== Config ===== */
+function openConfig(type, idx){
+  const s = type==='b' ? BUILTIN_SUBJECTS[idx] : loadCustom()[idx];
+  S.subject = JSON.parse(JSON.stringify(s));
+  document.getElementById("cfg-title").textContent=s.name;
+  document.getElementById("cfg-sub").textContent=`Tổng cộng ${s.questions.length} câu hỏi`;
+  const sel=document.getElementById("cfg-count");
+  const total=s.questions.length;
+  const opts=[["all","Tất cả ("+total+" câu)"]];
+  [10,15,20,25,30,40,50].forEach(k=>{ if(k<total) opts.push([k,k+" câu (ngẫu nhiên)"]); });
+  sel.innerHTML=opts.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join("");
+  show("config");
+}
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function startQuiz(){
+  const s=S.subject;
+  let qs=s.questions.map((q,i)=>({...q, _orig:i}));
+  const countVal=document.getElementById("cfg-count").value;
+  const shQ=document.getElementById("cfg-shuffleQ").checked;
+  const shA=document.getElementById("cfg-shuffleA").checked;
+  S.pass=parseInt(document.getElementById("cfg-pass").value);
+  S.timeLimit=parseInt(document.getElementById("cfg-time").value);
+  if(shQ) shuffle(qs);
+  if(countVal!=="all"){ qs=qs.slice(0, parseInt(countVal)); }
+  // shuffle answers per question, keep track of correct
+  S.qlist = qs.map(q=>{
+    let opts=q.options.map((t,i)=>({t,correct:i===q.answer}));
+    if(shA) shuffle(opts);
+    return { q:q.q, opts, correctIdx:opts.findIndex(o=>o.correct) };
+  });
+  S.answers=new Array(S.qlist.length).fill(null);
+  S.idx=0;
+  document.getElementById("quiz-subject").textContent=s.name;
+  document.getElementById("total-count").textContent=S.qlist.length;
+  buildPalette();
+  renderQ();
+  show("quiz");
+  startTimer();
+}
+
+/* ===== Quiz rendering ===== */
+const LETTERS=["A","B","C","D","E","F"];
+function renderQ(){
+  const q=S.qlist[S.idx];
+  document.getElementById("q-index").textContent=`CÂU ${S.idx+1} / ${S.qlist.length}`;
+  document.getElementById("q-text").textContent=q.q;
+  const box=document.getElementById("q-options");
+  box.innerHTML="";
+  q.opts.forEach((o,i)=>{
+    const sel=S.answers[S.idx]===i;
+    const el=document.createElement("div");
+    el.className="opt"+(sel?" sel":"");
+    el.innerHTML=`<div class="k">${LETTERS[i]}</div><div class="t">${esc(o.t)}</div>`;
+    el.onclick=()=>{ S.answers[S.idx]=i; renderQ(); updateProgress(); };
+    box.appendChild(el);
+  });
+  document.getElementById("prev-btn").disabled=S.idx===0;
+  document.getElementById("next-btn").disabled=S.idx===S.qlist.length-1;
+  updatePalette(); updateProgress();
+}
+function prevQ(){ if(S.idx>0){S.idx--;renderQ();} }
+function nextQ(){ if(S.idx<S.qlist.length-1){S.idx++;renderQ();} }
+function updateProgress(){
+  const ans=S.answers.filter(a=>a!==null).length;
+  document.getElementById("answered-count").textContent=ans;
+  document.getElementById("progress-bar").style.width=(ans/S.qlist.length*100)+"%";
+}
+function buildPalette(){
+  const p=document.getElementById("palette"); p.innerHTML="";
+  S.qlist.forEach((_,i)=>{ const b=document.createElement("button"); b.className="pal"; b.textContent=i+1; b.onclick=()=>{S.idx=i;renderQ();}; p.appendChild(b); });
+}
+function updatePalette(){
+  document.querySelectorAll("#palette .pal").forEach((b,i)=>{
+    b.className="pal"+(S.answers[i]!==null?" answered":"")+(i===S.idx?" current":"");
+  });
+}
+
+/* ===== Timer ===== */
+function startTimer(){
+  const t=document.getElementById("timer");
+  if(!S.timeLimit){ t.classList.add("hidden"); S.startTs=Date.now(); return; }
+  t.classList.remove("hidden");
+  S.tLeft=S.timeLimit*60; S.startTs=Date.now();
+  renderTimer();
+  S.timer=setInterval(()=>{ S.tLeft--; renderTimer(); if(S.tLeft<=0){ stopTimer(); flash("Hết giờ! Tự động nộp bài."); gradeSubmit(); } },1000);
+}
+function renderTimer(){
+  const t=document.getElementById("timer");
+  const m=Math.floor(S.tLeft/60), s=S.tLeft%60;
+  t.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  t.classList.toggle("warn", S.tLeft<=30);
+}
+function stopTimer(){ if(S.timer){clearInterval(S.timer);S.timer=null;} }
+
+/* ===== Submit & grade ===== */
+function confirmSubmit(){
+  const blank=S.answers.filter(a=>a===null).length;
+  const msg = blank>0 ? `Còn ${blank} câu chưa trả lời. Bạn vẫn muốn nộp bài?` : "Bạn chắc chắn muốn nộp bài?";
+  document.getElementById("confirm-text").textContent=msg;
+  document.getElementById("confirm-overlay").classList.add("show");
+}
+function doSubmitConfirmed(){ document.getElementById("confirm-overlay").classList.remove("show"); gradeSubmit(); }
+function cancelSubmit(){ document.getElementById("confirm-overlay").classList.remove("show"); }
+function gradeSubmit(){
+  stopTimer();
+  let correct=0, wrong=0, blank=0;
+  S.qlist.forEach((q,i)=>{
+    if(S.answers[i]===null) blank++;
+    else if(S.answers[i]===q.correctIdx) correct++;
+    else wrong++;
+  });
+  const total=S.qlist.length;
+  const pct=Math.round(correct/total*100);
+  const pass=pct>=S.pass;
+  const secs=Math.floor((Date.now()-S.startTs)/1000);
+  const mm=Math.floor(secs/60), ss=secs%60;
+  document.getElementById("score-pct").textContent=pct+"%";
+  document.getElementById("score-fraction").textContent=correct+"/"+total+" câu";
+  const ring=document.getElementById("score-ring");
+  ring.style.setProperty("--p",pct);
+  ring.style.setProperty("--c", pass?"var(--green)":"var(--red)");
+  const v=document.getElementById("verdict");
+  v.className="verdict "+(pass?"pass":"fail");
+  v.textContent=pass?"✅ ĐẠT":"❌ CHƯA ĐẠT";
+  document.getElementById("r-correct").textContent=correct;
+  document.getElementById("r-wrong").textContent=wrong;
+  document.getElementById("r-blank").textContent=blank;
+  document.getElementById("r-time").textContent=mm+"′"+String(ss).padStart(2,"0")+"″";
+  show("result");
+}
+
+/* ===== Review ===== */
+function showReview(){
+  const list=document.getElementById("review-list");
+  list.innerHTML="";
+  S.qlist.forEach((q,i)=>{
+    const chosen=S.answers[i];
+    const ok=chosen===q.correctIdx;
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.marginBottom="12px";
+    let optsHtml=q.opts.map((o,k)=>{
+      let cls="opt";
+      if(k===q.correctIdx) cls+=" correct";
+      else if(k===chosen) cls+=" wrong";
+      let tag="";
+      if(k===q.correctIdx) tag='<span class="tag ok">Đáp án đúng</span>';
+      else if(k===chosen) tag='<span class="tag no">Bạn chọn</span>';
+      return `<div class="${cls}"><div class="k">${LETTERS[k]}</div><div class="t">${esc(o.t)}${tag}</div></div>`;
+    }).join("");
+    card.innerHTML=`<div class="qbox">
+      <div class="qnum">CÂU ${i+1} ${ok?'<span class="tag ok">✔ Đúng</span>':(chosen===null?'<span class="tag no">Bỏ trống</span>':'<span class="tag no">✘ Sai</span>')}</div>
+      <div class="qtext">${esc(q.q)}</div>
+      <div class="opts">${optsHtml}</div></div>`;
+    list.appendChild(card);
+  });
+  show("review");
+}
+function backToResult(){ show("result"); }
+function retry(){ openConfig(S.subject.builtin?'b':'c', findSubjectIndex()); }
+function findSubjectIndex(){
+  const name=S.subject.name;
+  let bi=BUILTIN_SUBJECTS.findIndex(s=>s.name===name);
+  if(bi>=0){S.subject.builtin=true;return bi;}
+  const ci=loadCustom().findIndex(s=>s.name===name);
+  S.subject.builtin=false; return ci;
+}
+
+/* ===== Import ===== */
+function switchTab(tab){
+  document.querySelectorAll(".tabs .tabbtn").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  ["paste","file","manage"].forEach(t=>document.getElementById("tab-"+t).classList.toggle("hidden",t!==tab));
+  if(tab==="manage") renderManage();
+}
+let pasteParsed=null;
+function analyzePaste(){
+  const txt=document.getElementById("imp-text").value;
+  const msg=document.getElementById("paste-msg");
+  const qs=parseMoodle(txt);
+  const noAns=qs.filter(q=>q.answer===null).length;
+  if(!qs.length){ msg.innerHTML='<div class="msg err">Không tìm thấy câu hỏi nào. Kiểm tra lại định dạng.</div>'; document.getElementById("save-paste").disabled=true; pasteParsed=null; return; }
+  pasteParsed=qs;
+  msg.innerHTML=`<div class="msg ok">Đã nhận diện <b>${qs.length}</b> câu hỏi.${noAns?` ⚠ ${noAns} câu chưa khớp đáp án (sẽ bỏ qua khi chấm).`:' Tất cả đều có đáp án đúng.'}</div>`;
+  document.getElementById("save-paste").disabled=false;
+}
+function savePaste(){
+  const name=document.getElementById("imp-name").value.trim();
+  if(!name){ flash("Nhập tên môn trước"); return; }
+  if(!pasteParsed){ analyzePaste(); if(!pasteParsed) return; }
+  const clean=pasteParsed.filter(q=>q.answer!==null);
+  if(!clean.length){ flash("Không có câu nào khớp đáp án"); return; }
+  addCustomSubject({name, questions:clean});
+  document.getElementById("imp-text").value="";
+  document.getElementById("imp-name").value="";
+  document.getElementById("paste-msg").innerHTML="";
+  document.getElementById("save-paste").disabled=true; pasteParsed=null;
+  flash("Đã lưu môn: "+name);
+  switchTab("manage");
+}
+function handleFile(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const msg=document.getElementById("file-msg");
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      let subj;
+      if(f.name.toLowerCase().endsWith(".json")){
+        const data=JSON.parse(r.result);
+        const name=data.name||f.name.replace(/\.json$/i,"");
+        const questions=(data.questions||data).map(q=>({q:q.q||q.question, options:q.options||q.choices, answer:q.answer}));
+        if(!questions.length||questions.some(q=>!q.options)) throw new Error("Thiếu trường options");
+        subj={name,questions};
+      } else {
+        const qs=parseMoodle(r.result).filter(q=>q.answer!==null);
+        if(!qs.length) throw new Error("Không tách được câu hỏi");
+        subj={name:f.name.replace(/\.txt$/i,""), questions:qs};
+      }
+      addCustomSubject(subj);
+      msg.innerHTML=`<div class="msg ok">Đã nhập <b>${subj.questions.length}</b> câu từ "${esc(subj.name)}".</div>`;
+      flash("Đã thêm môn: "+subj.name);
+      renderManage();
+    }catch(e){ msg.innerHTML=`<div class="msg err">Lỗi: ${esc(e.message)}</div>`; }
+  };
+  r.readAsText(f);
+  ev.target.value="";
+}
+function addCustomSubject(subj){
+  const arr=loadCustom();
+  const ex=arr.findIndex(s=>s.name===subj.name);
+  if(ex>=0){ if(!confirm(`Môn "${subj.name}" đã tồn tại. Ghi đè?`)) return; arr[ex]=subj; }
+  else arr.push(subj);
+  saveCustom(arr);
+}
+function renderManage(){
+  const el=document.getElementById("manage-list");
+  const arr=loadCustom();
+  if(!arr.length){ el.innerHTML='<div class="hint">Chưa có môn nào được thêm. Dùng tab "Dán đề" hoặc "Tải file" để thêm.</div>'; return; }
+  el.innerHTML=arr.map((s,i)=>`
+    <div class="list-item">
+      <div class="info"><b>${esc(s.name)}</b><span>${s.questions.length} câu</span></div>
+      <div class="acts">
+        <button class="btn btn-soft mini" onclick="exportSubject(${i})">⬇ Export JSON</button>
+        <button class="btn btn-ghost mini" onclick="deleteSubject(${i})">🗑 Xoá</button>
+      </div>
+    </div>`).join("");
+}
+function exportSubject(i){
+  const s=loadCustom()[i];
+  const blob=new Blob([JSON.stringify(s,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=s.name.replace(/[^\w\-]+/g,"_")+".json";
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function deleteSubject(i){
+  const arr=loadCustom();
+  if(confirm(`Xoá môn "${arr[i].name}"?`)){ arr.splice(i,1); saveCustom(arr); renderManage(); }
+}
+
+/* ===== Utils ===== */
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+let flashT=null;
+function flash(msg){ const f=document.getElementById("flash"); f.textContent=msg; f.classList.add("show"); clearTimeout(flashT); flashT=setTimeout(()=>f.classList.remove("show"),2200); }
+
+/* ===== Init ===== */
+renderHome();
+</script>
+</body>
+</html>
